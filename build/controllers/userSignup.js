@@ -11,6 +11,9 @@ const registerUser = async (request, response) => {
                 message: "All fields are required"
             });
         }
+        // // Define types for findAdmin and findAdminError
+        // let findAdmin: HRAdmin | null = null;
+        // let findAdminError: PostgrestError | null = null;
         const { data: findAdmin, error: findAdminError } = await app_1.supabase
             .from('users')
             .select('*')
@@ -57,6 +60,7 @@ const registerUser = async (request, response) => {
         }
         return response.status(200).json({
             message: "Admin Registered",
+            checkAdmin,
             admin: {
                 firstName: checkAdmin.firstName,
                 lastName: checkAdmin.lastName,

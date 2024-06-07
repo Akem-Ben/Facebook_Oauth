@@ -5,6 +5,7 @@ import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { createClient } from '@supabase/supabase-js'
+import adminRouter from './routes/adminRoute'
 
 
 const app = express();
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+
+app.use('/admin', adminRouter)
 
 export const supabase = createClient(`${process.env.DATABASE_URL}`, `${process.env.PUBLIC_KEY}`)
 
