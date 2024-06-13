@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.facebookCallback = exports.facebookAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
 require("express-session");
-const store_1 = require("../../middlewares/store");
+const app_1 = require("../../app");
 const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 const facebookAuth = (request, response) => {
     const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
@@ -40,13 +40,13 @@ const facebookCallback = async (request, response) => {
         const profileResponse = await axios_1.default.get(`https://graph.facebook.com/me`, {
             params: {
                 access_token: longLivedAccessToken,
-                fields: "id,last_name,email,about,age_range,avatar_2d_profile_picture,birthday,education,favorite_athletes,favorite_teams,first_name,hometown,gender,id_for_avatars,inspirational_people,install_type,installed,is_guest_user,languages,link,location,middle_name,name,photos",
+                fields: "id,last_name,email,first_name,gender,middle_name,display_name",
             },
         });
         const profile = profileResponse.data;
         request.session.facebookProfile = profile;
         request.session.accessToken = longLivedAccessToken;
-        (0, store_1.setTempStorage)(request.sessionID, profile);
+        await app_1.client.hSet('user', profile);
         request.session.save((err) => {
             if (err) {
                 console.error('Session save error:', err);

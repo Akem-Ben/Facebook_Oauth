@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import axios from "axios";
 import dotenv from "dotenv";
 import qs from "qs";
-import { getTempStorage } from "../../middlewares/store";
+import { client } from "../../app";
 
 dotenv.config();
 
@@ -21,10 +21,13 @@ export const instagramCallback = async (
   request: Request,
   response: Response
 ) => {
-  const facebookProfile = getTempStorage(request.sessionID);
 
-  console.log("Facebook:", facebookProfile);
+  let userSession = await client.hGetAll('user-session:123');
+  
+  console.log('stringifiedSession', JSON.stringify(userSession, null, 2));
 
+  console.log('User Session:', userSession);
+  
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {

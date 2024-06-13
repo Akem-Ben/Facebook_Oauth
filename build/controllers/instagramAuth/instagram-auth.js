@@ -7,7 +7,7 @@ exports.instagramCallback = exports.instagramAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const qs_1 = __importDefault(require("qs"));
-const store_1 = require("../../middlewares/store");
+const app_1 = require("../../app");
 dotenv_1.default.config();
 let user;
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
@@ -18,8 +18,9 @@ const instagramAuth = async (request, response) => {
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
-    const facebookProfile = (0, store_1.getTempStorage)(request.sessionID);
-    console.log("Facebook:", facebookProfile);
+    let userSession = await app_1.client.hGetAll('user-session:123');
+    console.log('stringifiedSession', JSON.stringify(userSession, null, 2));
+    console.log('User Session:', userSession);
     const instagramCode = request.query.code;
     if (!instagramCode) {
         return response.redirect("http://localhost:5173/failure");

@@ -1,4 +1,6 @@
 import express, { Request, Response } from "express";
+import session from "express-session";
+import { createClient as createRedis } from 'redis';
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import logger from "morgan";
@@ -6,18 +8,23 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import faceBookRouter from "./routes/facebookRoutes";
-import session from "express-session";
 
-const app = express();
 
 dotenv.config();
 
-app.use(bodyParser.json());
-app.use(logger("dev"));
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+const app = express();
+
+// Configure Redis client
+export const client = createRedis();
+
+client.on('connect', () => {
+  console.log('Connected to Redis');
+});
+
+client.on('error', err => console.log('Redis Client Error', err));
+
+client.connect();
+
 
 app.use(
   session({
@@ -27,6 +34,14 @@ app.use(
     cookie: { secure: false },
   })
 );
+
+
+app.use(bodyParser.json());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 
 app.use("/", faceBookRouter);
