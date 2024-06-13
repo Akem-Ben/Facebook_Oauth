@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.supabase = exports.client = void 0;
+exports.supabase = void 0;
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
-const redis_1 = require("redis");
+// import { createClient as createRedis } from 'redis';
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -17,12 +17,12 @@ const facebookRoutes_1 = __importDefault(require("./routes/facebookRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Configure Redis client
-exports.client = (0, redis_1.createClient)();
-exports.client.on('connect', () => {
-    console.log('Connected to Redis');
-});
-exports.client.on('error', err => console.log('Redis Client Error', err));
-exports.client.connect();
+// export const client = createRedis();
+// client.on('connect', () => {
+//   console.log('Connected to Redis');
+// });
+// client.on('error', err => console.log('Redis Client Error', err));
+// client.connect();
 app.use((0, express_session_1.default)({
     secret: `${process.env.APP_KEY}`,
     resave: false,

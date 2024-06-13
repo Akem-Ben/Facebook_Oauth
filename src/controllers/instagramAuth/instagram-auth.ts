@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import axios from "axios";
 import dotenv from "dotenv";
 import qs from "qs";
-import { client } from "../../app";
+// import { client } from "../../app";
 
 dotenv.config();
 
@@ -22,11 +22,11 @@ export const instagramCallback = async (
   response: Response
 ) => {
 
-  let userSession = await client.hGetAll('user-session:123');
+  // let userSession = await client.hGetAll('user-session:123');
   
-  console.log('stringifiedSession', JSON.stringify(userSession, null, 2));
+  // console.log('stringifiedSession', JSON.stringify(userSession, null, 2));
 
-  console.log('User Session:', userSession);
+  // console.log('User Session:', userSession);
   
   const instagramCode = request.query.code as string;
 

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.facebookCallback = exports.facebookAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
 require("express-session");
-const app_1 = require("../../app");
+// import { client } from '../../app';
 const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 const facebookAuth = (request, response) => {
     const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
@@ -46,7 +46,7 @@ const facebookCallback = async (request, response) => {
         const profile = profileResponse.data;
         request.session.facebookProfile = profile;
         request.session.accessToken = longLivedAccessToken;
-        await app_1.client.hSet('user', profile);
+        // await client.hSet('user', profile)
         request.session.save((err) => {
             if (err) {
                 console.error('Session save error:', err);

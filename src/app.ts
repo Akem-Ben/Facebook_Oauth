@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import session from "express-session";
-import { createClient as createRedis } from 'redis';
+// import { createClient as createRedis } from 'redis';
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import logger from "morgan";
@@ -15,15 +15,15 @@ dotenv.config();
 const app = express();
 
 // Configure Redis client
-export const client = createRedis();
+// export const client = createRedis();
 
-client.on('connect', () => {
-  console.log('Connected to Redis');
-});
+// client.on('connect', () => {
+//   console.log('Connected to Redis');
+// });
 
-client.on('error', err => console.log('Redis Client Error', err));
+// client.on('error', err => console.log('Redis Client Error', err));
 
-client.connect();
+// client.connect();
 
 
 app.use(
