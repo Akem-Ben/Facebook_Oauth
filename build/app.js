@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.supabase = void 0;
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
-// import { createClient as createRedis } from 'redis';
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -16,25 +15,18 @@ const supabase_js_1 = require("@supabase/supabase-js");
 const facebookRoutes_1 = __importDefault(require("./routes/facebookRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-// Configure Redis client
-// export const client = createRedis();
-// client.on('connect', () => {
-//   console.log('Connected to Redis');
-// });
-// client.on('error', err => console.log('Redis Client Error', err));
-// client.connect();
-app.use((0, express_session_1.default)({
-    secret: `${process.env.APP_KEY}`,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-}));
 app.use(body_parser_1.default.json());
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
+app.use((0, express_session_1.default)({
+    secret: `${process.env.APP_KEY}`,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+}));
 app.use("/", facebookRoutes_1.default);
 exports.supabase = (0, supabase_js_1.createClient)(`${process.env.DATABASE_URL}`, `${process.env.PUBLIC_KEY}`);
 const checkConnection = async () => {
@@ -48,9 +40,6 @@ const checkConnection = async () => {
     }
 };
 checkConnection();
-// app.get("/", (req, res) => {
-//   res.render("auth");
-// });
 app.get("/", (request, response) => {
     response.send("Server Hosted Successfully");
 });

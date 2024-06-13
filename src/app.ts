@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import session from "express-session";
-// import { createClient as createRedis } from 'redis';
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import logger from "morgan";
@@ -14,17 +13,12 @@ dotenv.config();
 
 const app = express();
 
-// Configure Redis client
-// export const client = createRedis();
-
-// client.on('connect', () => {
-//   console.log('Connected to Redis');
-// });
-
-// client.on('error', err => console.log('Redis Client Error', err));
-
-// client.connect();
-
+app.use(bodyParser.json());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 app.use(
   session({
@@ -34,15 +28,6 @@ app.use(
     cookie: { secure: false },
   })
 );
-
-
-app.use(bodyParser.json());
-app.use(logger("dev"));
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-
 
 app.use("/", faceBookRouter);
 
@@ -63,10 +48,6 @@ const checkConnection = async () => {
 };
 
 checkConnection();
-
-// app.get("/", (req, res) => {
-//   res.render("auth");
-// });
 
 app.get("/", (request: Request, response: Response) => {
   response.send("Server Hosted Successfully");

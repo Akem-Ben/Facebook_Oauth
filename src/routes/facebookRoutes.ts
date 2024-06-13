@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/auth/facebook', facebookAuth);
 router.get('/auth/facebook/callback', facebookCallback);
 router.get('/auth/instagram', instagramAuth);
-router.get('/auth/instagram/callback', instagramCallback);
+router.get('/auth/instagram/callback/:id', instagramCallback);
 router.post('/logout/:accessToken', logout);
 
 export default router;

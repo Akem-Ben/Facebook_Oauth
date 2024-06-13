@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import axios from "axios";
 import dotenv from "dotenv";
 import qs from "qs";
-// import { client } from "../../app";
 
 dotenv.config();
 
@@ -13,7 +12,7 @@ const REDIRECT_URI =
 //"http://localhost:3030/auth/instagram/callback";
 
 export const instagramAuth = async (request: Request, response: Response) => {
-  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
+  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback/1000000&scope=user_profile,user_media&response_type=code`;
   response.redirect(authUrl);
 };
 
@@ -22,12 +21,12 @@ export const instagramCallback = async (
   response: Response
 ) => {
 
-  // let userSession = await client.hGetAll('user-session:123');
+  console.log('Session in instagramCallback:', request.session); 
   
-  // console.log('stringifiedSession', JSON.stringify(userSession, null, 2));
+  const id = request.params.id;
 
-  // console.log('User Session:', userSession);
-  
+  console.log('id is', id)
+
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {
