@@ -77,9 +77,8 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
     // Save user info to session
     // request.session.user = profile;
 
-    request.session.user = profile;
-    // console.log(longLivedAccessToken)
-    const user = profile
+    // request.session.user = profile;
+    // const user = profile
     request.session.accessToken = longLivedAccessToken;
 
     response.redirect('http://localhost:3030/auth/instagram');
