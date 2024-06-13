@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.facebookCallback = exports.facebookAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
-const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 require("express-session");
+const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 const facebookAuth = (request, response) => {
     const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
     response.redirect(authUrl);
@@ -57,6 +57,7 @@ const facebookCallback = async (request, response) => {
         // request.session.user = profile;
         request.session.user = profile;
         // console.log(longLivedAccessToken)
+        const user = profile;
         request.session.accessToken = longLivedAccessToken;
         response.redirect('http://localhost:3030/auth/instagram');
     }

@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
+import 'express-session';
 
 const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
-
-import 'express-session';
 
 declare module 'express-session' {
   interface SessionData {
@@ -80,6 +79,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
     request.session.user = profile;
     // console.log(longLivedAccessToken)
+    const user = profile
     request.session.accessToken = longLivedAccessToken;
 
     response.redirect('http://localhost:3030/auth/instagram');
