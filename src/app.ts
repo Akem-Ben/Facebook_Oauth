@@ -24,6 +24,7 @@ app.use(
     secret: `${process.env.APP_KEY}`,
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: false },
   })
 );
 

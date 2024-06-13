@@ -25,6 +25,7 @@ app.use((0, express_session_1.default)({
     secret: `${process.env.APP_KEY}`,
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: false },
 }));
 app.use("/", facebookRoutes_1.default);
 exports.supabase = (0, supabase_js_1.createClient)(`${process.env.DATABASE_URL}`, `${process.env.PUBLIC_KEY}`);

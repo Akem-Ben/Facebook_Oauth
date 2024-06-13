@@ -57,7 +57,13 @@ const facebookCallback = async (request, response) => {
         // request.session.user = profile;
         request.session.facebookProfile = profile;
         request.session.accessToken = longLivedAccessToken;
-        response.redirect('http://localhost:3030/auth/instagram');
+        request.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return response.redirect('http://localhost:5173/failure');
+            }
+            response.redirect('http://localhost:3030/auth/instagram');
+        });
     }
     catch (error) {
         console.error(error.message);
