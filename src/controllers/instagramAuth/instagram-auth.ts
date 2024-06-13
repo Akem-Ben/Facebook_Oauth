@@ -22,7 +22,7 @@ export const instagramCallback = async (request: Request, response: Response) =>
   }
 
   try {
-    const tokenResponse = await axios.post(`https://api.instagram.com/oauth/access_token?client_id=${process.env.INSTAGRAM_APP_ID}&client_secret=${process.env.INSTAGRAM_APP_SECRET}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}&code=${code}`,
+    const tokenResponse = await axios.post(`https://api.instagram.com/oauth/access_token?client_id=1504602600414657&client_secret=e1f5d628daf3bbfc9c7dbc8fabc6e7cb&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}&code=${code}`,
       // {
       //   headers: {
       //     'Content-Type': 'application/x-www-form-urlencoded'
