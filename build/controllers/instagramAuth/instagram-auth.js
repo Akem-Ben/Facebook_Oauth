@@ -19,28 +19,28 @@ const instagramAuth = async (request, response) => {
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
     const facebookProfile = (0, store_1.getTempStorage)(request.sessionID);
-    console.log('Facebook:', facebookProfile);
+    console.log("Facebook:", facebookProfile);
     const instagramCode = request.query.code;
     if (!instagramCode) {
-        return response.redirect('http://localhost:5173/failure');
+        return response.redirect("http://localhost:5173/failure");
     }
     try {
-        const tokenResponse = await axios_1.default.post('https://api.instagram.com/oauth/access_token', qs_1.default.stringify({
+        const tokenResponse = await axios_1.default.post("https://api.instagram.com/oauth/access_token", qs_1.default.stringify({
             client_id: process.env.INSTAGRAM_APP_ID,
             client_secret: process.env.INSTAGRAM_APP_SECRET,
-            grant_type: 'authorization_code',
+            grant_type: "authorization_code",
             redirect_uri: REDIRECT_URI,
             code: instagramCode,
         }), {
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
         });
         const shortLivedAccessToken = tokenResponse.data.access_token;
         const instegramUserId = tokenResponse.data.user_id;
         const longLivedTokenResponse = await axios_1.default.get(`https://graph.instagram.com/access_token`, {
             params: {
-                grant_type: 'ig_exchange_token',
+                grant_type: "ig_exchange_token",
                 client_secret: process.env.INSTAGRAM_APP_SECRET,
                 access_token: shortLivedAccessToken,
             },
@@ -53,11 +53,11 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
-        response.redirect('https://beat-tech-blog.vercel.app/');
+        response.redirect("https://beat-tech-blog.vercel.app/");
     }
     catch (error) {
-        console.error('Instagram Auth Error:', error.response.data);
-        response.redirect('http://localhost:5173/failure');
+        console.error("Instagram Auth Error:", error.response.data);
+        response.redirect("http://localhost:5173/failure");
     }
 };
 exports.instagramCallback = instagramCallback;

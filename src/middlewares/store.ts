@@ -6,6 +6,6 @@ export function setTempStorage(sessionID:any, facebookProfile:any) {
 
 export function getTempStorage(sessionID:any) {
   const facebookProfile = tempStore[sessionID];
-  delete tempStore[sessionID]; // remove the temporary storage
+//   delete tempStore[sessionID]; // remove the temporary storage
   return facebookProfile;
 }

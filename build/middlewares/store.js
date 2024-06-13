@@ -8,7 +8,7 @@ function setTempStorage(sessionID, facebookProfile) {
 exports.setTempStorage = setTempStorage;
 function getTempStorage(sessionID) {
     const facebookProfile = tempStore[sessionID];
-    delete tempStore[sessionID]; // remove the temporary storage
+    //   delete tempStore[sessionID]; // remove the temporary storage
     return facebookProfile;
 }
 exports.getTempStorage = getTempStorage;

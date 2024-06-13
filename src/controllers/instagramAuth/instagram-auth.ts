@@ -1,14 +1,15 @@
-import { Request, Response } from 'express';
-import axios from 'axios';
-import dotenv from 'dotenv';
-import qs from 'qs';
-import { getTempStorage } from '../../middlewares/store';
+import { Request, Response } from "express";
+import axios from "axios";
+import dotenv from "dotenv";
+import qs from "qs";
+import { getTempStorage } from "../../middlewares/store";
 
 dotenv.config();
 
-let user:any;
+let user: any;
 
-const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback"
+const REDIRECT_URI =
+  "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 
 export const instagramAuth = async (request: Request, response: Response) => {
@@ -16,38 +17,46 @@ export const instagramAuth = async (request: Request, response: Response) => {
   response.redirect(authUrl);
 };
 
-export const instagramCallback = async (request: Request, response: Response) => {
+export const instagramCallback = async (
+  request: Request,
+  response: Response
+) => {
   const facebookProfile = getTempStorage(request.sessionID);
 
-  console.log('Facebook:', facebookProfile);
+  console.log("Facebook:", facebookProfile);
 
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {
-    return response.redirect('http://localhost:5173/failure');
+    return response.redirect("http://localhost:5173/failure");
   }
 
   try {
-    const tokenResponse = await axios.post('https://api.instagram.com/oauth/access_token', qs.stringify({
-      client_id: process.env.INSTAGRAM_APP_ID,
-      client_secret: process.env.INSTAGRAM_APP_SECRET,
-      grant_type: 'authorization_code',
-      redirect_uri: REDIRECT_URI,
-      code: instagramCode,
-    }), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+    const tokenResponse = await axios.post(
+      "https://api.instagram.com/oauth/access_token",
+      qs.stringify({
+        client_id: process.env.INSTAGRAM_APP_ID,
+        client_secret: process.env.INSTAGRAM_APP_SECRET,
+        grant_type: "authorization_code",
+        redirect_uri: REDIRECT_URI,
+        code: instagramCode,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       }
-    });
+    );
 
     const shortLivedAccessToken = tokenResponse.data.access_token;
 
-        const instegramUserId = tokenResponse.data.user_id;
+    const instegramUserId = tokenResponse.data.user_id;
 
-        const longLivedTokenResponse = await axios.get(
-      `https://graph.instagram.com/access_token`, {
+    const longLivedTokenResponse = await axios.get(
+      `https://graph.instagram.com/access_token`,
+      {
         params: {
-          grant_type: 'ig_exchange_token',
+          grant_type: "ig_exchange_token",
           client_secret: process.env.INSTAGRAM_APP_SECRET as string,
           access_token: shortLivedAccessToken,
         },
@@ -56,18 +65,21 @@ export const instagramCallback = async (request: Request, response: Response) =>
 
     const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
-    const profileResponse = await axios.get(`https://graph.instagram.com/${instegramUserId}`, {
-      params: {
-        access_token: longLivedAccessToken,
-        fields: "id,username,account_type,media_count",
-      },
-    });
+    const profileResponse = await axios.get(
+      `https://graph.instagram.com/${instegramUserId}`,
+      {
+        params: {
+          access_token: longLivedAccessToken,
+          fields: "id,username,account_type,media_count",
+        },
+      }
+    );
 
     const instagramProfile = profileResponse.data;
 
-    response.redirect('https://beat-tech-blog.vercel.app/');
+    response.redirect("https://beat-tech-blog.vercel.app/");
   } catch (error: any) {
-    console.error('Instagram Auth Error:', error.response.data);
-    response.redirect('http://localhost:5173/failure');
+    console.error("Instagram Auth Error:", error.response.data);
+    response.redirect("http://localhost:5173/failure");
   }
 };
