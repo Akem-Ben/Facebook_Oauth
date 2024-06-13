@@ -21,11 +21,7 @@ const instagramCallback = async (request, response) => {
     }
     console.log('code', code);
     try {
-        const tokenResponse = await axios_1.default.post(`https://api.instagram.com/oauth/access_token?client_id=${process.env.INSTAGRAM_APP_ID}&client_secret=${process.env.INSTAGRAM_APP_SECRET}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}&code=${code}`, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
+        const tokenResponse = await axios_1.default.post(`https://api.instagram.com/oauth/access_token?client_id=${process.env.INSTAGRAM_APP_ID}&client_secret=${process.env.INSTAGRAM_APP_SECRET}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}&code=${code}`);
         console.log('toks', tokenResponse);
         const shortLivedAccessToken = tokenResponse.data.access_token;
         const userId = tokenResponse.data.user_id;
