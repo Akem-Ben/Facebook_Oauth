@@ -11,13 +11,13 @@ dotenv_1.default.config();
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 const instagramAuth = async (request, response) => {
-    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
+    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media,email&response_type=code`;
     response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
-    const code = request.query.code;
-    if (!code) {
+    const instagramCode = request.query.code;
+    if (!instagramCode) {
         return response.redirect('http://localhost:5173/failure');
     }
     try {
@@ -26,15 +26,14 @@ const instagramCallback = async (request, response) => {
             client_secret: process.env.INSTAGRAM_APP_SECRET,
             grant_type: 'authorization_code',
             redirect_uri: REDIRECT_URI,
-            code: code,
+            code: instagramCode,
         }), {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
-        console.log('toks', tokenResponse);
         const shortLivedAccessToken = tokenResponse.data.access_token;
-        const userId = tokenResponse.data.user_id;
+        const instegramUserId = tokenResponse.data.user_id;
         const longLivedTokenResponse = await axios_1.default.get(`https://graph.instagram.com/access_token`, {
             params: {
                 grant_type: 'ig_exchange_token',
@@ -43,15 +42,13 @@ const instagramCallback = async (request, response) => {
             },
         });
         const longLivedAccessToken = longLivedTokenResponse.data.access_token;
-        const profileResponse = await axios_1.default.get(`https://graph.instagram.com/${userId}`, {
+        const profileResponse = await axios_1.default.get(`https://graph.instagram.com/${instegramUserId}`, {
             params: {
                 access_token: longLivedAccessToken,
                 fields: "id,username,account_type,media_count",
             },
         });
-        const profile = profileResponse.data;
-        console.log('Instagram Profile:', profile);
-        // Here you can save the profile and accessToken to your database or session
+        const instagramProfile = profileResponse.data;
         response.redirect('https://beat-tech-blog.vercel.app/');
     }
     catch (error) {

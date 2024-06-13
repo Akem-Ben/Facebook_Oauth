@@ -20,9 +20,9 @@ export const facebookAuth = (request: Request, response: Response) => {
 };
 
 export const facebookCallback = async (request: Request, response: Response) => {
-  const code = request.query.code as string;
+  const facebookCode = request.query.code as string;
 
-  if (!code) {
+  if (!facebookCode) {
     return response.redirect('http://localhost:5173/failure');
   }
 
@@ -33,14 +33,13 @@ export const facebookCallback = async (request: Request, response: Response) => 
           client_id: process.env.FACEBOOK_APP_ID as string,
           redirect_uri: REDIRECT_URI,
           client_secret: process.env.FACEBOOK_APP_SECRET as string,
-          code,
+          code: facebookCode,
         },
       }
     );
 
 const shortLivedAccessToken = tokenResponse.data.access_token;
 
-// Step 2: Exchange the short-lived access token for a long-lived access token
 const longLivedTokenResponse = await axios.get(
   `https://graph.facebook.com/v10.0/oauth/access_token`, {
     params: {

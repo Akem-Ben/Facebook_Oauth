@@ -5,7 +5,6 @@ import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
-import instagramRouter from "./routes/instagramRoutes";
 import faceBookRouter from "./routes/facebookRoutes";
 import session from "express-session";
 
@@ -30,7 +29,6 @@ app.use(
 
 
 app.use("/", faceBookRouter);
-app.use("/insta", instagramRouter);
 
 export const supabase = createClient(
   `${process.env.DATABASE_URL}`,
