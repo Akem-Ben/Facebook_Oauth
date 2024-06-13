@@ -59,8 +59,6 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
     const profile = profileResponse.data;
 
-    console.log('prof', profile)
-
     // Register or update user in your database
     // const { error } = await supabase.from('users').upsert({
     //   id: profile.id,
@@ -75,7 +73,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
     // Save user info to session
     // request.session.user = profile;
 
-    // request.session.user = profile;
+    request.session.user = profile;
     // const user = profile
     request.session.accessToken = longLivedAccessToken;
 
