@@ -16,7 +16,7 @@ const instagramAuth = async (request, response) => {
     const newUser = JSON.stringify(user);
     console.log('user is', user);
     console.log('newUser is', newUser);
-    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code&profile=10000`;
+    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
     response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
