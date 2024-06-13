@@ -26,8 +26,7 @@ export const facebookCallback = async (request: Request, response: Response) => 
   }
 
   try {
-    const tokenResponse = await axios.get(
-      `https://graph.facebook.com/v10.0/oauth/access_token`, {
+    const tokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
         params: {
           client_id: process.env.FACEBOOK_APP_ID as string,
           redirect_uri: REDIRECT_URI,
@@ -39,8 +38,7 @@ export const facebookCallback = async (request: Request, response: Response) => 
 
 const shortLivedAccessToken = tokenResponse.data.access_token;
 
-const longLivedTokenResponse = await axios.get(
-  `https://graph.facebook.com/v10.0/oauth/access_token`, {
+const longLivedTokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
     params: {
       grant_type: 'fb_exchange_token',
       client_id: process.env.FACEBOOK_APP_ID as string,
@@ -55,7 +53,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
     const profileResponse = await axios.get(`https://graph.facebook.com/me`, {
       params: {
         access_token: longLivedAccessToken,
-        fields: "id,last_name,email,first_name,gender,middle_name,display_name",
+        fields: "id,last_name,email,first_name,gender,middle_name",
       },
     });
 
@@ -84,8 +82,8 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
       response.redirect('http://localhost:3030/auth/instagram');
 
   } catch (error: any) {
-    console.error(error.message);
-    response.redirect('/http://localhost:5173/failure');
+    console.error(error.response.data);
+    response.redirect('http://localhost:5173/failure');
   }
 };
 

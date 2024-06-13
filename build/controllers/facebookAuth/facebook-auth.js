@@ -39,7 +39,7 @@ const facebookCallback = async (request, response) => {
         const profileResponse = await axios_1.default.get(`https://graph.facebook.com/me`, {
             params: {
                 access_token: longLivedAccessToken,
-                fields: "id,last_name,email,first_name,gender,middle_name,display_name",
+                fields: "id,last_name,email,first_name,gender,middle_name",
             },
         });
         const profile = profileResponse.data;
@@ -61,8 +61,8 @@ const facebookCallback = async (request, response) => {
         response.redirect('http://localhost:3030/auth/instagram');
     }
     catch (error) {
-        console.error(error.message);
-        response.redirect('/http://localhost:5173/failure');
+        console.error(error.response.data);
+        response.redirect('http://localhost:5173/failure');
     }
 };
 exports.facebookCallback = facebookCallback;

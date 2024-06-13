@@ -49,8 +49,7 @@ export const instagramCallback = async (
 
     const instegramUserId = tokenResponse.data.user_id;
 
-    const longLivedTokenResponse = await axios.get(
-      `https://graph.instagram.com/access_token`,
+    const longLivedTokenResponse = await axios.get(`https://graph.instagram.com/access_token`,
       {
         params: {
           grant_type: "ig_exchange_token",
@@ -62,8 +61,7 @@ export const instagramCallback = async (
 
     const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
-    const profileResponse = await axios.get(
-      `https://graph.instagram.com/${instegramUserId}`,
+    const profileResponse = await axios.get(`https://graph.instagram.com/${instegramUserId}`,
       {
         params: {
           access_token: longLivedAccessToken,
