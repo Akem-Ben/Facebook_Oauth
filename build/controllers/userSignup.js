@@ -11,16 +11,12 @@ const registerUser = async (request, response) => {
                 message: "All fields are required"
             });
         }
-        // // Define types for findAdmin and findAdminError
-        // let findAdmin: HRAdmin | null = null;
-        // let findAdminError: PostgrestError | null = null;
         const { data: findAdmin, error: findAdminError } = await app_1.supabase
             .from('users')
             .select('*')
             .eq('email', email)
             .single();
         if (findAdminError && findAdminError.code !== 'PGRST116') {
-            // 'PGRST116' is the error code for "no rows returned", ignore it if this is the case
             return response.status(500).json({
                 message: "Internal Server Error"
             });

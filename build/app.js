@@ -11,7 +11,9 @@ const morgan_1 = __importDefault(require("morgan"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const supabase_js_1 = require("@supabase/supabase-js");
-const adminRoute_1 = __importDefault(require("./routes/adminRoute"));
+const instagramRoutes_1 = __importDefault(require("./routes/instagramRoutes"));
+const facebookRoutes_1 = __importDefault(require("./routes/facebookRoutes"));
+const express_session_1 = __importDefault(require("express-session"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use(body_parser_1.default.json());
@@ -20,22 +22,28 @@ app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
-app.use('/admin', adminRoute_1.default);
+app.use((0, express_session_1.default)({
+    secret: `${process.env.APP_KEY}`,
+    resave: false,
+    saveUninitialized: true,
+}));
+app.use("/", facebookRoutes_1.default);
+app.use("/insta", instagramRoutes_1.default);
 exports.supabase = (0, supabase_js_1.createClient)(`${process.env.DATABASE_URL}`, `${process.env.PUBLIC_KEY}`);
 const checkConnection = async () => {
-    const { error } = await exports.supabase
-        .from('users')
-        .select('id')
-        .limit(1);
+    const { error } = await exports.supabase.from("users").select("id").limit(1);
     if (error) {
-        console.error('Failed to connect to Supabase:', error.message);
+        console.error("Failed to connect to Supabase:", error.message);
         process.exit(1);
     }
     else {
-        console.log('Successfully connected to Supabase');
+        console.log("Successfully connected to Supabase");
     }
 };
 checkConnection();
+// app.get("/", (req, res) => {
+//   res.render("auth");
+// });
 app.get("/", (request, response) => {
     response.send("Server Hosted Successfully");
 });

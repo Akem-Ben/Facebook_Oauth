@@ -4,9 +4,10 @@ import bodyParser from "body-parser";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { createClient } from '@supabase/supabase-js'
-import adminRouter from './routes/adminRoute'
-
+import { createClient } from "@supabase/supabase-js";
+import instagramRouter from "./routes/instagramRoutes";
+import faceBookRouter from "./routes/facebookRoutes";
+import session from "express-session";
 
 const app = express();
 
@@ -19,33 +20,43 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.use('/admin', adminRouter)
+app.use(
+  session({
+    secret: `${process.env.APP_KEY}`,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
-export const supabase = createClient(`${process.env.DATABASE_URL}`, `${process.env.PUBLIC_KEY}`)
 
+app.use("/", faceBookRouter);
+app.use("/insta", instagramRouter);
+
+export const supabase = createClient(
+  `${process.env.DATABASE_URL}`,
+  `${process.env.PUBLIC_KEY}`
+);
 
 const checkConnection = async () => {
-  const { error } = await supabase
-    .from('users')
-    .select('id')
-    .limit(1);
+  const { error } = await supabase.from("users").select("id").limit(1);
 
   if (error) {
-    console.error('Failed to connect to Supabase:', error.message);
+    console.error("Failed to connect to Supabase:", error.message);
     process.exit(1);
   } else {
-    console.log('Successfully connected to Supabase');
+    console.log("Successfully connected to Supabase");
   }
 };
 
 checkConnection();
 
+// app.get("/", (req, res) => {
+//   res.render("auth");
+// });
 
 app.get("/", (request: Request, response: Response) => {
   response.send("Server Hosted Successfully");
 });
-
-
 
 app.listen(process.env.PORT, () => {
   console.log(`server running on Port ${process.env.PORT}`);
