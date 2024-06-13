@@ -14,7 +14,7 @@ const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/ca
 const instagramAuth = async (request, response) => {
     const profile = request.session.facebookProfile;
     console.log(profile);
-    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code&facebook_profile=${JSON.stringify(profile)}`;
+    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&facebook_profile=${JSON.stringify(profile)}&response_type=code`;
     response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
