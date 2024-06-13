@@ -16,14 +16,15 @@ const instagramAuth = async (request, response) => {
     const newUser = JSON.stringify(user);
     console.log('user is', user);
     console.log('newUser is', newUser);
-    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback?1000000&scope=user_profile,user_media&response_type=code`;
+    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code&profile=10000`;
     response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
     console.log('Session in instagramCallback:', request.session);
-    const id = request.params.id;
+    const id = request.query.profile;
     console.log('id is', id);
+    console.log('querry', request.query);
     const instagramCode = request.query.code;
     if (!instagramCode) {
         return response.redirect("http://localhost:5173/failure");
