@@ -44,7 +44,7 @@ const facebookCallback = async (request, response) => {
             },
         });
         const profile = profileResponse.data;
-        console.log('prof', profile);
+        // console.log('prof', profile)
         // Register or update user in your database
         // const { error } = await supabase.from('users').upsert({
         //   id: profile.id,
@@ -57,7 +57,7 @@ const facebookCallback = async (request, response) => {
         // Save user info to session
         // request.session.user = profile;
         request.session.user = profile;
-        console.log(longLivedAccessToken);
+        // console.log(longLivedAccessToken)
         request.session.accessToken = longLivedAccessToken;
         response.redirect('http://localhost:3030/auth/instagram');
     }

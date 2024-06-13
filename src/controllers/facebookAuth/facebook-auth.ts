@@ -63,7 +63,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
     const profile = profileResponse.data;
 
-    console.log('prof', profile)
+    // console.log('prof', profile)
 
     // Register or update user in your database
     // const { error } = await supabase.from('users').upsert({
@@ -80,7 +80,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
     // request.session.user = profile;
 
     request.session.user = profile;
-    console.log(longLivedAccessToken)
+    // console.log(longLivedAccessToken)
     request.session.accessToken = longLivedAccessToken;
 
     response.redirect('http://localhost:3030/auth/instagram');
