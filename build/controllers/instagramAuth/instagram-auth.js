@@ -18,7 +18,7 @@ const instagramAuth = async (request, response) => {
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
-    console.log('user', request.session.user);
+    console.log('Facebook profile from session:', request.session.facebookProfile);
     const instagramCode = request.query.code;
     if (!instagramCode) {
         return response.redirect('http://localhost:5173/failure');

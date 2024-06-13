@@ -17,7 +17,7 @@ export const instagramAuth = async (request: Request, response: Response) => {
 };
 
 export const instagramCallback = async (request: Request, response: Response) => {
-  console.log('user',request.session.user)
+  console.log('Facebook profile from session:', request.session.facebookProfile);
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {
