@@ -10,13 +10,15 @@ const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/ca
 //"http://localhost:3030/auth/instagram/callback";
 
 export const instagramAuth = async (request: Request, response: Response) => {
-  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media,email&response_type=code`;
+  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.redirect(authUrl);
 };
 
 export const instagramCallback = async (request: Request, response: Response) => {
 
   const instagramCode = request.query.code as string;
+
+  console.log('user',request.session.user)
 
   if (!instagramCode) {
     return response.redirect('http://localhost:5173/failure');
