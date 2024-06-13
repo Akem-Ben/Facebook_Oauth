@@ -5,17 +5,19 @@ import qs from 'qs';
 
 dotenv.config();
 
+let user:any;
 
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback"
 //"http://localhost:3030/auth/instagram/callback";
 
 export const instagramAuth = async (request: Request, response: Response) => {
+  user = request.session.facebookProfile
   const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.redirect(authUrl);
 };
 
 export const instagramCallback = async (request: Request, response: Response) => {
-  console.log('Facebook profile from session:', request.session.facebookProfile);
+  console.log('Facebook profile from session:', user);
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {

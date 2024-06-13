@@ -8,15 +8,17 @@ const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const qs_1 = __importDefault(require("qs"));
 dotenv_1.default.config();
+let user;
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 const instagramAuth = async (request, response) => {
+    user = request.session.facebookProfile;
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
     response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
-    console.log('Facebook profile from session:', request.session.facebookProfile);
+    console.log('Facebook profile from session:', user);
     const instagramCode = request.query.code;
     if (!instagramCode) {
         return response.redirect('http://localhost:5173/failure');
