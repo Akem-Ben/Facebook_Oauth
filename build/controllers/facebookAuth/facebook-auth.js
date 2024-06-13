@@ -55,7 +55,7 @@ const facebookCallback = async (request, response) => {
     }
     catch (error) {
         console.error(error.message);
-        response.redirect('/failure');
+        response.redirect('/http://localhost:5173/failure');
     }
 };
 exports.facebookCallback = facebookCallback;

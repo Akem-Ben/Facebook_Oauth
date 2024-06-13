@@ -75,7 +75,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
   } catch (error: any) {
     console.error(error.message);
-    response.redirect('/failure');
+    response.redirect('/http://localhost:5173/failure');
   }
 };
 
