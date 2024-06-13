@@ -10,7 +10,7 @@ export const instagramAuth = async (request: Request, response: Response) => {
 };
 
 export const instagramCallback = async (request: Request, response: Response) => {
-  
+
   const code = request.query.code as string;
 
   if (!code) {
@@ -30,7 +30,7 @@ export const instagramCallback = async (request: Request, response: Response) =>
       }
     );
 
-    console.log(tokenResponse)
+    console.log('toks',tokenResponse)
 
     const accessToken = tokenResponse.data.access_token;
     const userId = tokenResponse.data.user_id;
@@ -54,3 +54,74 @@ export const instagramCallback = async (request: Request, response: Response) =>
     response.redirect('http://localhost:5173/failure');
   }
 };
+
+
+
+
+// import { Request, Response } from 'express';
+// import axios from 'axios';
+
+// const REDIRECT_URI = process.env.REDIRECT_URI || "https://your-render-app.onrender.com/auth/instagram/callback";
+
+// export const instagramAuth = async (request: Request, response: Response) => {
+//   const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
+//   response.redirect(authUrl);
+// };
+
+// export const instagramCallback = async (request: Request, response: Response) => {
+//   const code = request.query.code as string;
+
+//   if (!code) {
+//     return response.redirect('http://localhost:5173/failure');
+//   }
+
+//   try {
+//     // Exchange code for short-lived access token
+//     const tokenResponse = await axios.post(
+//       `https://api.instagram.com/oauth/access_token`, null, {
+//         params: {
+//           client_id: process.env.INSTAGRAM_APP_ID as string,
+//           client_secret: process.env.INSTAGRAM_APP_SECRET as string,
+//           grant_type: 'authorization_code',
+//           redirect_uri: REDIRECT_URI,
+//           code,
+//         },
+//       }
+//     );
+
+//     const shortLivedAccessToken = tokenResponse.data.access_token;
+//     const userId = tokenResponse.data.user_id;
+
+//     // Exchange short-lived access token for long-lived access token
+//     const longLivedTokenResponse = await axios.get(
+//       `https://graph.instagram.com/access_token`, {
+//         params: {
+//           grant_type: 'ig_exchange_token',
+//           client_secret: process.env.INSTAGRAM_APP_SECRET as string,
+//           access_token: shortLivedAccessToken,
+//         },
+//       }
+//     );
+
+//     const longLivedAccessToken = longLivedTokenResponse.data.access_token;
+
+//     // Fetch user profile using long-lived access token
+//     const profileResponse = await axios.get(`https://graph.instagram.com/${userId}`, {
+//       params: {
+//         access_token: longLivedAccessToken,
+//         fields: "id,username,account_type,media_count",
+//       },
+//     });
+
+//     const profile = profileResponse.data;
+
+//     console.log('Instagram Profile:', profile);
+
+//     // Here you can save the profile and accessToken to your database or session
+
+//     response.redirect('https://your-frontend-app.com/profile');
+//   } catch (error: any) {
+//     console.error('Instagram Auth Error:', error.response ? error.response.data : error.message);
+//     response.redirect('http://localhost:5173/failure');
+//   }
+// };
