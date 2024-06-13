@@ -21,8 +21,6 @@ export const instagramCallback = async (request: Request, response: Response) =>
     return response.redirect('http://localhost:5173/failure');
   }
 
-  console.log('code',code)
-
   try {
     const tokenResponse = await axios.post(`https://api.instagram.com/oauth/access_token?client_id=${process.env.INSTAGRAM_APP_ID}&client_secret=${process.env.INSTAGRAM_APP_SECRET}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}&code=${code}`,
       // {
@@ -64,7 +62,7 @@ export const instagramCallback = async (request: Request, response: Response) =>
 
     response.redirect('https://beat-tech-blog.vercel.app/');
   } catch (error: any) {
-    console.error('Instagram Auth Error:', error.data);
+    console.error('Instagram Auth Error:', error.response.data);
     response.redirect('http://localhost:5173/failure');
   }
 };
