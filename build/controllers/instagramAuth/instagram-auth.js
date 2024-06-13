@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instagramCallback = exports.instagramAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 const instagramAuth = async (request, response) => {
@@ -47,7 +49,7 @@ const instagramCallback = async (request, response) => {
         response.redirect('https://beat-tech-blog.vercel.app/');
     }
     catch (error) {
-        console.error('Instagram Auth Error:', error);
+        console.error('Instagram Auth Error:', error.data);
         response.redirect('http://localhost:5173/failure');
     }
 };

@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback"
 //"http://localhost:3030/auth/instagram/callback";
@@ -27,7 +31,6 @@ export const instagramCallback = async (request: Request, response: Response) =>
         }
       }
     );
-
     console.log('toks',tokenResponse)
 
     const shortLivedAccessToken = tokenResponse.data.access_token;
@@ -61,7 +64,7 @@ export const instagramCallback = async (request: Request, response: Response) =>
 
     response.redirect('https://beat-tech-blog.vercel.app/');
   } catch (error: any) {
-    console.error('Instagram Auth Error:', error);
+    console.error('Instagram Auth Error:', error.data);
     response.redirect('http://localhost:5173/failure');
   }
 };
