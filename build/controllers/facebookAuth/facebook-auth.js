@@ -44,7 +44,7 @@ const facebookCallback = async (request, response) => {
             },
         });
         const profile = profileResponse.data;
-        // console.log('prof', profile)
+        console.log('prof', profile);
         // Register or update user in your database
         // const { error } = await supabase.from('users').upsert({
         //   id: profile.id,
