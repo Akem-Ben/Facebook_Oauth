@@ -8,10 +8,10 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import faceBookRouter from "./routes/facebookRoutes";
 
+const app = express();
 
 dotenv.config();
 
-const app = express();
 
 app.use(bodyParser.json());
 app.use(logger("dev"));
@@ -25,7 +25,6 @@ app.use(
     secret: `${process.env.APP_KEY}`,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
   })
 );
 
