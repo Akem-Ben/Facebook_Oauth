@@ -8,7 +8,6 @@ declare module 'express-session' {
   interface SessionData {
     accessToken: string;
     user: any;
-    facebookProfile: any
   }
 }
 
@@ -62,16 +61,10 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
     const profile = profileResponse.data;
 
-    request.session.facebookProfile = profile;
+    request.session.user = profile;
     request.session.accessToken = longLivedAccessToken;
 
-    request.session.save((err) => {
-      if (err) {
-        console.error('Session save error:', err);
-        return response.redirect('http://localhost:5173/failure');
-      }
       response.redirect('http://localhost:3030/auth/instagram');
-    });
 
   } catch (error: any) {
     console.error(error.message);
