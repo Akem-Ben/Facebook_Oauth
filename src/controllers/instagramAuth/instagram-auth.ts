@@ -10,9 +10,8 @@ export const instagramAuth = async (request: Request, response: Response) => {
 };
 
 export const instagramCallback = async (request: Request, response: Response) => {
-  console.log('code recieved')
+  
   const code = request.query.code as string;
-  console.log('code is',code)
 
   if (!code) {
     return response.redirect('http://localhost:5173/failure');
@@ -30,6 +29,8 @@ export const instagramCallback = async (request: Request, response: Response) =>
         },
       }
     );
+
+    console.log(tokenResponse)
 
     const accessToken = tokenResponse.data.access_token;
     const userId = tokenResponse.data.user_id;
@@ -49,7 +50,7 @@ export const instagramCallback = async (request: Request, response: Response) =>
 
     response.redirect('https://beat-tech-blog.vercel.app/');
   } catch (error: any) {
-    console.error('Instagram Auth Error:', error.message);
+    console.error('Instagram Auth Error:', error);
     response.redirect('http://localhost:5173/failure');
   }
 };

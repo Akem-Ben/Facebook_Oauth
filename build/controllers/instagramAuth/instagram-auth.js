@@ -13,9 +13,7 @@ const instagramAuth = async (request, response) => {
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
-    console.log('code recieved');
     const code = request.query.code;
-    console.log('code is', code);
     if (!code) {
         return response.redirect('http://localhost:5173/failure');
     }
@@ -29,6 +27,7 @@ const instagramCallback = async (request, response) => {
                 code,
             },
         });
+        console.log(tokenResponse);
         const accessToken = tokenResponse.data.access_token;
         const userId = tokenResponse.data.user_id;
         const profileResponse = await axios_1.default.get(`https://graph.instagram.com/${userId}`, {
@@ -43,7 +42,7 @@ const instagramCallback = async (request, response) => {
         response.redirect('https://beat-tech-blog.vercel.app/');
     }
     catch (error) {
-        console.error('Instagram Auth Error:', error.message);
+        console.error('Instagram Auth Error:', error);
         response.redirect('http://localhost:5173/failure');
     }
 };
