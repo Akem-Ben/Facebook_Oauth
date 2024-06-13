@@ -12,13 +12,15 @@ const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/ca
 
 export const instagramAuth = async (request: Request, response: Response) => {
   const profile = request.session.facebookProfile;
+  console.log(profile)
   const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code&facebook_profile=${JSON.stringify(profile)}`;
   response.redirect(authUrl);
 };
 
 export const instagramCallback = async (request: Request, response: Response) => {
   const facebookProfile:any = request.query.facebook_profile
-  console.log('Facebook profile from session:', facebookProfile);
+  console.log('que', request.query)
+  console.log('Facebook:', facebookProfile);
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {
