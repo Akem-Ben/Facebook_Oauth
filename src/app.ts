@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import session from "express-session";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import logger from "morgan";
@@ -6,11 +7,11 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import faceBookRouter from "./routes/facebookRoutes";
-import session from "express-session";
 
 const app = express();
 
 dotenv.config();
+
 
 app.use(bodyParser.json());
 app.use(logger("dev"));
@@ -26,7 +27,6 @@ app.use(
     saveUninitialized: true,
   })
 );
-
 
 app.use("/", faceBookRouter);
 
@@ -47,10 +47,6 @@ const checkConnection = async () => {
 };
 
 checkConnection();
-
-// app.get("/", (req, res) => {
-//   res.render("auth");
-// });
 
 app.get("/", (request: Request, response: Response) => {
   response.send("Server Hosted Successfully");

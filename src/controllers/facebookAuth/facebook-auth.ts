@@ -55,7 +55,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
     const profileResponse = await axios.get(`https://graph.facebook.com/me`, {
       params: {
         access_token: longLivedAccessToken,
-        fields: "id,last_name,email,about,age_range,avatar_2d_profile_picture,birthday,education,favorite_athletes,favorite_teams,first_name,hometown,gender,id_for_avatars,inspirational_people,install_type,installed,is_guest_user,languages,link,location,middle_name,name,photos",
+        fields: "id,last_name,email,first_name,gender,middle_name,display_name",
       },
     });
 
@@ -81,10 +81,11 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
     // const user = profile
     request.session.accessToken = longLivedAccessToken;
 
-    response.redirect('http://localhost:3030/auth/instagram');
+      response.redirect('http://localhost:3030/auth/instagram');
+
   } catch (error: any) {
     console.error(error.message);
-    response.redirect('/failure');
+    response.redirect('/http://localhost:5173/failure');
   }
 };
 

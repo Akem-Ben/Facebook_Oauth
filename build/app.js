@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.supabase = void 0;
 const express_1 = __importDefault(require("express"));
+const express_session_1 = __importDefault(require("express-session"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -12,7 +13,6 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const supabase_js_1 = require("@supabase/supabase-js");
 const facebookRoutes_1 = __importDefault(require("./routes/facebookRoutes"));
-const express_session_1 = __importDefault(require("express-session"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use(body_parser_1.default.json());
@@ -39,9 +39,6 @@ const checkConnection = async () => {
     }
 };
 checkConnection();
-// app.get("/", (req, res) => {
-//   res.render("auth");
-// });
 app.get("/", (request, response) => {
     response.send("Server Hosted Successfully");
 });
