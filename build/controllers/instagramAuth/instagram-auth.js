@@ -12,7 +12,11 @@ let user;
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 const instagramAuth = async (request, response) => {
-    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback/1000000&scope=user_profile,user_media&response_type=code`;
+    const user = request.session.facebookProfile;
+    const newUser = JSON.stringify(user);
+    console.log('user is', user);
+    console.log('newUser is', newUser);
+    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback?1000000&scope=user_profile,user_media&response_type=code`;
     response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
