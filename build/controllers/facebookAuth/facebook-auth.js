@@ -44,17 +44,6 @@ const facebookCallback = async (request, response) => {
         });
         const profile = profileResponse.data;
         console.log('prof', profile);
-        // Register or update user in your database
-        // const { error } = await supabase.from('users').upsert({
-        //   id: profile.id,
-        //   name: profile.name,
-        //   access_token: accessToken,
-        // });
-        // if (error) {
-        //   throw new Error('Failed to save user');
-        // }
-        // Save user info to session
-        // request.session.user = profile;
         request.session.facebookProfile = profile;
         request.session.accessToken = longLivedAccessToken;
         request.session.save((err) => {
