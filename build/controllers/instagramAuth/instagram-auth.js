@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instagramCallback = exports.instagramAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
-const REDIRECT_URI = "https://2290-197-210-85-66.ngrok-free.app/auth/instagram/callback";
+const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 const instagramAuth = (request, response) => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 
-const REDIRECT_URI = "https://2290-197-210-85-66.ngrok-free.app/auth/instagram/callback"
+const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback"
 //"http://localhost:3030/auth/instagram/callback";
 
 export const instagramAuth = (request: Request, response: Response) => {
