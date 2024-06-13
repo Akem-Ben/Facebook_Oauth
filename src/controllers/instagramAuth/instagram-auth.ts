@@ -22,7 +22,7 @@ export const instagramCallback = async (
   request: Request,
   response: Response
 ) => {
-
+  try {
   console.log('Session in instagramCallback:', request.session); 
 
   const instagramCode = request.query.code as string;
@@ -35,7 +35,7 @@ export const instagramCallback = async (
     return response.redirect("http://localhost:5173/failure");
   }
 
-  try {
+  
     const tokenResponse = await axios.post(
       "https://api.instagram.com/oauth/access_token",
       qs.stringify({

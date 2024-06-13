@@ -20,14 +20,14 @@ const instagramAuth = async (request, response) => {
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
-    console.log('Session in instagramCallback:', request.session);
-    const instagramCode = request.query.code;
-    const myCookie = request.cookies.user;
-    console.log('user', myCookie);
-    if (!instagramCode) {
-        return response.redirect("http://localhost:5173/failure");
-    }
     try {
+        console.log('Session in instagramCallback:', request.session);
+        const instagramCode = request.query.code;
+        const myCookie = request.cookies.user;
+        console.log('user', myCookie);
+        if (!instagramCode) {
+            return response.redirect("http://localhost:5173/failure");
+        }
         const tokenResponse = await axios_1.default.post("https://api.instagram.com/oauth/access_token", qs_1.default.stringify({
             client_id: process.env.INSTAGRAM_APP_ID,
             client_secret: process.env.INSTAGRAM_APP_SECRET,
