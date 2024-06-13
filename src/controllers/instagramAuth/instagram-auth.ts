@@ -12,7 +12,7 @@ export const instagramAuth = async (request: Request, response: Response) => {
 export const instagramCallback = async (request: Request, response: Response) => {
   console.log('code recieved')
   const code = request.query.code as string;
-
+  console.log('code is',code)
 
   if (!code) {
     return response.redirect('http://localhost:5173/failure');
