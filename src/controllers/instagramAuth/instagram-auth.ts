@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import qs from 'qs';
+import { getTempStorage } from '../../middlewares/store';
 
 dotenv.config();
 
@@ -11,16 +12,15 @@ const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/ca
 //"http://localhost:3030/auth/instagram/callback";
 
 export const instagramAuth = async (request: Request, response: Response) => {
-  const profile = request.session.facebookProfile;
-  console.log(profile)
-  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&facebook_profile=${JSON.stringify(profile)}&response_type=code`;
+  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.redirect(authUrl);
 };
 
 export const instagramCallback = async (request: Request, response: Response) => {
-  const facebookProfile:any = request.query.facebook_profile
-  console.log('que', request.query)
+  const facebookProfile = getTempStorage(request.sessionID);
+
   console.log('Facebook:', facebookProfile);
+
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {

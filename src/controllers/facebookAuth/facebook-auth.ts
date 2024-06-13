@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import 'express-session';
+import { setTempStorage } from '../../middlewares/store';
 
 const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 
@@ -62,10 +63,10 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
     const profile = profileResponse.data;
 
-    console.log('prof', profile)
-
     request.session.facebookProfile = profile;
     request.session.accessToken = longLivedAccessToken;
+
+    setTempStorage(request.sessionID, profile);
 
     request.session.save((err) => {
       if (err) {
