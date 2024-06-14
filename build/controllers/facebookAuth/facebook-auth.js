@@ -8,7 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 require("express-session");
 const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 const facebookAuth = (request, response) => {
-    const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,instagram_manage_messages`;
+    const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
     response.redirect(authUrl);
 };
 exports.facebookAuth = facebookAuth;
@@ -43,19 +43,7 @@ const facebookCallback = async (request, response) => {
             },
         });
         const profile = profileResponse.data;
-        // Register or update user in your database
-        // const { error } = await supabase.from('users').upsert({
-        //   id: profile.id,
-        //   name: profile.name,
-        //   access_token: accessToken,
-        // });
-        // if (error) {
-        //   throw new Error('Failed to save user');
-        // }
-        // Save user info to session
-        // request.session.user = profile;
         request.session.user = profile;
-        // const user = profile
         request.session.accessToken = longLivedAccessToken;
         response.redirect('http://localhost:3030/auth/instagram');
     }

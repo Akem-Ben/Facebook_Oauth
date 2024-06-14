@@ -14,7 +14,7 @@ declare module 'express-session' {
 
 
 export const facebookAuth = (request: Request, response: Response) => {
-  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,instagram_manage_messages`;
+  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
   response.redirect(authUrl);
 };
 
@@ -59,22 +59,8 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
     const profile = profileResponse.data;
 
-    // Register or update user in your database
-    // const { error } = await supabase.from('users').upsert({
-    //   id: profile.id,
-    //   name: profile.name,
-    //   access_token: accessToken,
-    // });
-
-    // if (error) {
-    //   throw new Error('Failed to save user');
-    // }
-
-    // Save user info to session
-    // request.session.user = profile;
-
     request.session.user = profile;
-    // const user = profile
+
     request.session.accessToken = longLivedAccessToken;
 
       response.redirect('http://localhost:3030/auth/instagram');
