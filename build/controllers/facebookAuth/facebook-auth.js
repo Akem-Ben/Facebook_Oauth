@@ -8,7 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 require("express-session");
 const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 const facebookAuth = (request, response) => {
-    const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
+    const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,instagram_manage_messages`;
     response.redirect(authUrl);
 };
 exports.facebookAuth = facebookAuth;
@@ -74,6 +74,6 @@ exports.facebookCallback = facebookCallback;
 //   installed: true,
 //   is_guest_user: false,
 //   name: 'Smart Kick'
-//,manage_pages,pages_messaging
+//instagram_graph_user_profile
 // }
 // &config_id=${2564397997087876}

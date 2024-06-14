@@ -14,7 +14,7 @@ declare module 'express-session' {
 
 
 export const facebookAuth = (request: Request, response: Response) => {
-  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
+  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,instagram_manage_messages`;
   response.redirect(authUrl);
 };
 
@@ -96,6 +96,6 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 //   installed: true,
 //   is_guest_user: false,
 //   name: 'Smart Kick'
-//,manage_pages,pages_messaging
+//instagram_graph_user_profile
 // }
 // &config_id=${2564397997087876}
