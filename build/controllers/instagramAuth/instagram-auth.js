@@ -8,7 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 const qs_1 = __importDefault(require("qs"));
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
-const page_access_token = process.env.PAGE_TOKEN;
+const page_access_token = "EAATYjbga7dkBO1V4MJQYXznmxjXZC3EEVmFyQIDU5ixuloyVLNsFeIbcfd6o9U80i5HMnV4xzKmmUk1XnAHZCmm9NbOuVufJwZCwZAL3TlYUHSCIC4LcSuWOaD3wEAXd0FRvkvdBf7ko92QgsmAaoKwoNzZCBwzawolBEDVVifRdlZB1LPgs7HfQ0YU4g6cVzZA";
 const instagramAuth = async (request, response) => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
     response.cookie('user', request.session.user);
@@ -55,6 +55,7 @@ const instagramCallback = async (request, response) => {
         });
         const instagramProfile = profileResponse.data;
         try {
+            console.log('page', page_access_token);
             await axios_1.default.post(`https:///graph.facebook.com/v20.0/me/messages?access_token=${page_access_token}`, {
                 recipient: { id: instagramProfile.id },
                 message: { text: "Welcome to our app!" }
