@@ -14,7 +14,7 @@ declare module 'express-session' {
 
 
 export const facebookAuth = (request: Request, response: Response) => {
-  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,pages_messaging`;
+  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
   response.redirect(authUrl);
 };
 
