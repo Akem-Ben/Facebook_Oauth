@@ -14,13 +14,13 @@ declare module 'express-session' {
 
 
 export const facebookAuth = (request: Request, response: Response) => {
-  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,user_messenger_contact`;
+  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&page_id=${process.env.FACEBOOK_PAGE_ID}&scope=email,public_profile,user_messenger_contact`;
   response.redirect(authUrl);
 };
 
 export const facebookCallback = async (request: Request, response: Response) => {
   const facebookCode = request.query.code as string;
-
+console.log('yh')
   if (!facebookCode) {
     return response.redirect('http://localhost:5173/failure');
   }
