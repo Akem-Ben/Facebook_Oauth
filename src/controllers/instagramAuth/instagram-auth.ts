@@ -8,7 +8,7 @@ const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/ca
 const page_access_token = "EAATYjbga7dkBO1V4MJQYXznmxjXZC3EEVmFyQIDU5ixuloyVLNsFeIbcfd6o9U80i5HMnV4xzKmmUk1XnAHZCmm9NbOuVufJwZCwZAL3TlYUHSCIC4LcSuWOaD3wEAXd0FRvkvdBf7ko92QgsmAaoKwoNzZCBwzawolBEDVVifRdlZB1LPgs7HfQ0YU4g6cVzZA"
 
 export const instagramAuth = async (request: Request, response: Response) => {
-  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media,pages_messaging&response_type=code`;
+  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.cookie('user', request.session.user)
   request.session.save(() => {
     response.redirect(authUrl);

@@ -8,7 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 require("express-session");
 const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
 const facebookAuth = (request, response) => {
-    const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
+    const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,user_messenger_contact`;
     response.redirect(authUrl);
 };
 exports.facebookAuth = facebookAuth;
