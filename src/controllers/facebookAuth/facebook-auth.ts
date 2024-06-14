@@ -14,7 +14,7 @@ declare module 'express-session' {
 
 
 export const facebookAuth = (request: Request, response: Response) => {
-  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&page_id=${process.env.FACEBOOK_PAGE_ID}&scope=email,public_profile,user_messenger_contact`;
+  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile`;
   response.redirect(authUrl);
 };
 
@@ -83,5 +83,5 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 //   is_guest_user: false,
 //   name: 'Smart Kick'
 //instagram_graph_user_profile
-// }
+// }user_messenger_contact
 // &config_id=${2564397997087876}

@@ -12,7 +12,7 @@ let user;
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 const instagramAuth = async (request, response) => {
-    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
+    const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media,instagram_graph_user_profile&response_type=code`;
     response.cookie('user', request.session.user);
     request.session.save(() => {
         response.redirect(authUrl);
