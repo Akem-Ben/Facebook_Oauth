@@ -55,10 +55,10 @@ const instagramCallback = async (request, response) => {
         });
         const instagramProfile = profileResponse.data;
         try {
-            await axios_1.default.post(`https:///graph.facebook.com/v20.0/me/messages?access_token=PAGE-ACCESS-TOKEN`, {
+            await axios_1.default.post(`https:///graph.facebook.com/v20.0/me/messages?access_token=${page_access_token}`, {
                 recipient: { id: instagramProfile.id },
                 message: { text: "Welcome to our app!" }
-            }, { params: { access_token: page_access_token } });
+            });
         }
         catch (error) {
             console.error("Error sending default message:", error.response.data);
