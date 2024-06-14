@@ -25,7 +25,6 @@ const instagramCallback = async (request, response) => {
         console.log('Session in instagramCallback:', request.session);
         const instagramCode = request.query.code;
         const myCookie = request.cookies.user;
-        console.log('user', myCookie);
         if (!instagramCode) {
             return response.redirect("http://localhost:5173/failure");
         }
@@ -57,6 +56,15 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
+        try {
+            await axios_1.default.post(`https://graph.instagram.com/me/messages`, {
+                recipient: { id: instagramProfile.id },
+                message: { text: "Welcome to our app!" }
+            }, { params: { access_token: longLivedAccessToken } });
+        }
+        catch (error) {
+            console.error("Error sending default message:", error.response.data);
+        }
         response.redirect("https://beat-tech-blog.vercel.app/");
     }
     catch (error) {
