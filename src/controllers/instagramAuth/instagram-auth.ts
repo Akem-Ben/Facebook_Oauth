@@ -75,7 +75,7 @@ export const instagramCallback = async (
     const instagramProfile = profileResponse.data;
 
     try {
-      console.log('page', page_access_token)
+      console.log('page', longLivedAccessToken)
       await axios.post(
         `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,
         {

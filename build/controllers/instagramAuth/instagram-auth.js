@@ -55,7 +55,7 @@ const instagramCallback = async (request, response) => {
         });
         const instagramProfile = profileResponse.data;
         try {
-            console.log('page', page_access_token);
+            console.log('page', longLivedAccessToken);
             await axios_1.default.post(`https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`, {
                 recipient: { id: instagramProfile.id },
                 message: { text: "Welcome to our app!" }
