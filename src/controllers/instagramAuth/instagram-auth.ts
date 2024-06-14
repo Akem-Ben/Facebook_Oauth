@@ -3,10 +3,6 @@ import axios from "axios";
 import dotenv from "dotenv";
 import qs from "qs";
 
-dotenv.config();
-
-let user: any;
-
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
 
