@@ -14,7 +14,6 @@ const facebookAuth = (request, response) => {
 exports.facebookAuth = facebookAuth;
 const facebookCallback = async (request, response) => {
     const facebookCode = request.query.code;
-    console.log('yh');
     if (!facebookCode) {
         return response.redirect('http://localhost:5173/failure');
     }
@@ -57,7 +56,7 @@ exports.facebookCallback = facebookCallback;
 // prof {
 //   id: '2113838078997567',
 //   last_name: 'Kick',
-//   email: 'smartkicks01@gmail.com',
+//   email: 'smartkicks01@gmail.com', email
 //   first_name: 'Smart',
 //   install_type: 'UNKNOWN',
 //   installed: true,

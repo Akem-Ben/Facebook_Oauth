@@ -20,7 +20,6 @@ export const facebookAuth = (request: Request, response: Response) => {
 
 export const facebookCallback = async (request: Request, response: Response) => {
   const facebookCode = request.query.code as string;
-console.log('yh')
   if (!facebookCode) {
     return response.redirect('http://localhost:5173/failure');
   }
@@ -38,17 +37,18 @@ console.log('yh')
 
 const shortLivedAccessToken = tokenResponse.data.access_token;
 
-const longLivedTokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
-    params: {
-      grant_type: 'fb_exchange_token',
-      client_id: process.env.FACEBOOK_APP_ID as string,
-      client_secret: process.env.FACEBOOK_APP_SECRET as string,
-      fb_exchange_token: shortLivedAccessToken,
-    },
-  }
-);
 
-const longLivedAccessToken = longLivedTokenResponse.data.access_token;
+const longLivedTokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
+  params: {
+    grant_type: 'fb_exchange_token',
+    client_id: process.env.FACEBOOK_APP_ID as string,
+    client_secret: process.env.FACEBOOK_APP_SECRET as string,
+    fb_exchange_token: shortLivedAccessToken,
+    },
+    }
+    );
+    
+    const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
     const profileResponse = await axios.get(`https://graph.facebook.com/me`, {
       params: {
@@ -76,7 +76,7 @@ const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 // prof {
 //   id: '2113838078997567',
 //   last_name: 'Kick',
-//   email: 'smartkicks01@gmail.com',
+//   email: 'smartkicks01@gmail.com', email
 //   first_name: 'Smart',
 //   install_type: 'UNKNOWN',
 //   installed: true,

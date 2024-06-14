@@ -5,6 +5,7 @@ import qs from "qs";
 
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
+const page_access_token = process.env.PAGE_TOKEN
 
 export const instagramAuth = async (request: Request, response: Response) => {
   const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
@@ -75,12 +76,12 @@ export const instagramCallback = async (
 
     try {
       await axios.post(
-        `https://graph.instagram.com/me/messages`,
+        `https:///graph.facebook.com/v20.0/me/messages?access_token=PAGE-ACCESS-TOKEN`,
         {
           recipient: { id: instagramProfile.id },
           message: { text: "Welcome to our app!" }
         },
-        { params: { access_token: longLivedAccessToken } }
+        { params: { access_token: page_access_token } }
       );
     } catch (error: any) {
       console.error("Error sending default message:", error.response.data);
