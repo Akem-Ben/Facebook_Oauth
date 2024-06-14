@@ -11,7 +11,7 @@ declare module 'express-session' {
   }
 }
 
-const FACEBOOK_PAGE_ID = 114514640381067
+const FACEBOOK_PAGE_ID = "114514640381067"
 
 export const facebookAuth = (request: Request, response: Response) => {
   const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&page_id=${FACEBOOK_PAGE_ID}&scope=email,public_profile,user_messenger_contact`;
