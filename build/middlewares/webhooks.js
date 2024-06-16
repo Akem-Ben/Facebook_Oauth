@@ -13,7 +13,6 @@ const verifyWebhook = (request, response) => {
     const challenge = request.query["hub.challenge"];
     if (mode && token) {
         if (mode === "subscribe" && token === VERIFY_TOKEN) {
-            console.log("WEBHOOK_VERIFIED");
             response.status(200).send(challenge);
         }
         else {

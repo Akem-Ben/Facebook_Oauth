@@ -11,7 +11,6 @@ export const verifyWebhook = (request: Request, response: Response) => {
 
   if (mode && token) {
     if (mode === "subscribe" && token === VERIFY_TOKEN) {
-      console.log("WEBHOOK_VERIFIED");
       response.status(200).send(challenge);
     } else {
       response.sendStatus(403);
@@ -29,7 +28,7 @@ export const handleWebhook = async (request: Request, response: Response) => {
         const message = entry.messaging[0];
 
         console.log("Message received:", message);
-        
+
         const setMessage = "Thank you for reaching out. We will get back to you soon.";
 
         const recipientId = message.sender.id;
