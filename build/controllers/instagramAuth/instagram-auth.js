@@ -21,10 +21,8 @@ const instagramCallback = async (request, response) => {
         console.log('Session in instagramCallback:', request.session);
         const instagramCode = request.query.code;
         if (!instagramCode) {
-            console.log('yeah');
             return response.redirect("http://localhost:5173/failure");
         }
-        console.log('no');
         const tokenResponse = await axios_1.default.post("https://api.instagram.com/oauth/access_token", qs_1.default.stringify({
             client_id: process.env.USER_INSTAGRAM_APP_ID,
             client_secret: process.env.USER_INSTAGRAM_APP_SECRET,
@@ -36,7 +34,6 @@ const instagramCallback = async (request, response) => {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         });
-        console.log('oops');
         const shortLivedAccessToken = tokenResponse.data.access_token;
         const instegramUserId = tokenResponse.data.user_id;
         const longLivedTokenResponse = await axios_1.default.get(`https://graph.instagram.com/access_token`, {
@@ -46,7 +43,6 @@ const instagramCallback = async (request, response) => {
                 access_token: shortLivedAccessToken,
             },
         });
-        console.log('oopsie');
         const longLivedAccessToken = longLivedTokenResponse.data.access_token;
         const profileResponse = await axios_1.default.get(`https://graph.instagram.com/${instegramUserId}`, {
             params: {
@@ -55,7 +51,6 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
-        console.log('page', longLivedAccessToken);
         // try {
         //   await axios.post(
         //     `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,

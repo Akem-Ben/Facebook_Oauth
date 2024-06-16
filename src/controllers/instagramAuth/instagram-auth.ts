@@ -24,11 +24,8 @@ export const instagramCallback = async (
   const instagramCode = request.query.code as string;
 
   if (!instagramCode) {
-    console.log('yeah')
     return response.redirect("http://localhost:5173/failure");
   }
-
-  console.log('no')
     const tokenResponse = await axios.post(
       "https://api.instagram.com/oauth/access_token",
       qs.stringify({
@@ -45,8 +42,6 @@ export const instagramCallback = async (
       }
     );
 
-    console.log('oops')
-
     const shortLivedAccessToken = tokenResponse.data.access_token;
 
     const instegramUserId = tokenResponse.data.user_id;
@@ -61,8 +56,6 @@ export const instagramCallback = async (
       }
     );
 
-    console.log('oopsie')
-
 
     const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
@@ -76,8 +69,6 @@ export const instagramCallback = async (
     );
 
     const instagramProfile = profileResponse.data;
-    
-    console.log('page', longLivedAccessToken)
     // try {
     //   await axios.post(
     //     `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,

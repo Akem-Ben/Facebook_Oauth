@@ -4,8 +4,8 @@ import axios from 'axios';
 
 
 
-export const sendMessages = async (req: Request, res: Response) => {
-  const { message, userId } = req.body;
+export const sendMessages = async (request: Request, response: Response) => {
+  const { message, userId, accessToken } = request.body;
 
   let users;
   if (userId) {
@@ -13,12 +13,10 @@ export const sendMessages = async (req: Request, res: Response) => {
   } else {
     const { data, error } = await supabase.from('instagram_users').select('id');
     if (error) {
-      return res.status(500).send('Error fetching users');
+      return response.status(500).send('Error fetching users');
     }
     users = data;
   }
-
-  const accessToken = "your-instagram-access-token"; // Replace with actual token
 
   users.forEach(async (user: any) => {
     try {
@@ -35,5 +33,5 @@ export const sendMessages = async (req: Request, res: Response) => {
     }
   });
 
-  res.status(200).send('Messages sent');
+  response.status(200).send('Messages sent');
 }

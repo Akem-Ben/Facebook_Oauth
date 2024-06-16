@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMessages = void 0;
 const app_1 = require("../../app"); // Assuming supabase is initialized in app.ts
 const axios_1 = __importDefault(require("axios"));
-const sendMessages = async (req, res) => {
-    const { message, userId } = req.body;
+const sendMessages = async (request, response) => {
+    const { message, userId, accessToken } = request.body;
     let users;
     if (userId) {
         users = [{ id: userId }];
@@ -15,11 +15,10 @@ const sendMessages = async (req, res) => {
     else {
         const { data, error } = await app_1.supabase.from('instagram_users').select('id');
         if (error) {
-            return res.status(500).send('Error fetching users');
+            return response.status(500).send('Error fetching users');
         }
         users = data;
     }
-    const accessToken = "your-instagram-access-token"; // Replace with actual token
     users.forEach(async (user) => {
         try {
             await axios_1.default.post(`https://graph.instagram.com/me/messages`, {
@@ -31,6 +30,6 @@ const sendMessages = async (req, res) => {
             console.error(`Error sending message to user ${user.id}:`, error.response.data);
         }
     });
-    res.status(200).send('Messages sent');
+    response.status(200).send('Messages sent');
 };
 exports.sendMessages = sendMessages;
