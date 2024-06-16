@@ -13,6 +13,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const supabase_js_1 = require("@supabase/supabase-js");
 const facebookRoutes_1 = __importDefault(require("./routes/facebookRoutes"));
+const scheduler_1 = require("./utilities/scheduler");
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use(body_parser_1.default.json());
@@ -27,6 +28,7 @@ app.use((0, express_session_1.default)({
     saveUninitialized: true,
 }));
 app.use("/", facebookRoutes_1.default);
+(0, scheduler_1.scheduler)();
 exports.supabase = (0, supabase_js_1.createClient)(`${process.env.DATABASE_URL}`, `${process.env.PUBLIC_KEY}`);
 const checkConnection = async () => {
     const { error } = await exports.supabase.from("users").select("id").limit(1);

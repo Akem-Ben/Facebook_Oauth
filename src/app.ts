@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import faceBookRouter from "./routes/facebookRoutes";
+import { scheduler } from "./utilities/scheduler";
 
 const app = express();
 
@@ -29,6 +30,8 @@ app.use(
 );
 
 app.use("/", faceBookRouter);
+
+scheduler();
 
 export const supabase = createClient(
   `${process.env.DATABASE_URL}`,

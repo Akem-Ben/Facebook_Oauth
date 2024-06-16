@@ -73,19 +73,19 @@ export const instagramCallback = async (
     );
 
     const instagramProfile = profileResponse.data;
-
-    try {
-      console.log('page', longLivedAccessToken)
-      await axios.post(
-        `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,
-        {
-          recipient: { id: instagramProfile.id },
-          message: { text: "Welcome to our app!" }
-        }
-      );
-    } catch (error: any) {
-      console.error("Error sending default message:", error.response.data);
-    }
+    
+    console.log('page', longLivedAccessToken)
+    // try {
+    //   await axios.post(
+    //     `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,
+    //     {
+    //       recipient: { id: instagramProfile.id },
+    //       message: { text: "Welcome to our app!" }
+    //     }
+    //   );
+    // } catch (error: any) {
+    //   console.error("Error sending default message:", error.response.data);
+    // }
 
     response.redirect("https://beat-tech-blog.vercel.app/");
   } catch (error: any) {
