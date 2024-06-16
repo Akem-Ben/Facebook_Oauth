@@ -43,7 +43,11 @@ export const handleWebhook = async (request: Request, response: Response) => {
 
         const check = await axios.post(
           "http://localhost:3030/send-message",
-          body
+          body, {
+            headers: {
+            'contentType': 'application/jon'
+            }
+          }
         );
 
         console.log("check", check.data);

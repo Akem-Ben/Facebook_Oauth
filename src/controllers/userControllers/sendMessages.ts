@@ -5,6 +5,7 @@ import axios from 'axios';
 
 
 export const sendMessages = async (request: Request, response: Response) => {
+  try{
   const { message, userId, accessToken } = request.body;
 
 //   let users;
@@ -19,8 +20,8 @@ export const sendMessages = async (request: Request, response: Response) => {
 //   }
 
 
-    try {
-      await axios.post(
+    // try {
+    const sender =  await axios.post(
         `https://graph.instagram.com/me/messages`,
         {
           recipient: { id: userId },
@@ -28,9 +29,14 @@ export const sendMessages = async (request: Request, response: Response) => {
         },
         { params: { access_token: accessToken } }
       );
-    } catch (error: any) {
-      console.error(`Error sending message to user ${userId}:`, error.response.data);
-    }
 
-  response.status(200).send('Messages sent');
+      console.log(sender.data)
+      
+    // } catch (error: any) {
+    //   console.error(`Error sending message to user ${userId}:`, error.response.data);
+    // }
+
+  }catch(error:any){
+    console.log(error.response)
+  }
 }
