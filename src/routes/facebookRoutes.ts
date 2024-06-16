@@ -11,8 +11,8 @@ router.get('/auth/facebook/callback', facebookCallback);
 router.get('/auth/instagram', instagramAuth);
 router.get('/auth/instagram/callback', instagramCallback);
 router.post('/logout/:accessToken', logout);
-router.get('/verify-webhook', verifyWebhook)
-router.post('/handle-webhook', handleWebhook)
+router.get('/webhook', verifyWebhook)
+router.post('/webhook', handleWebhook)
 
 export default router;
 
