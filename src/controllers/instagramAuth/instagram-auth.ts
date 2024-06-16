@@ -87,7 +87,7 @@ export const instagramCallback = async (
     //   console.error("Error sending default message:", error.response.data);
     // }
 
-    response.redirect("https://beat-tech-blog.vercel.app/");
+    response.redirect("https://ig.me/m/_akemini_");
   } catch (error: any) {
     console.error("Instagram Auth Error:", error.response.data);
     response.redirect("http://localhost:5173/failure");
