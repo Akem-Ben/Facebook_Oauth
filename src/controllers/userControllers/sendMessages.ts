@@ -22,7 +22,7 @@ export const sendMessages = async (request: Request, response: Response) => {
 
     // try {
     const sender =  await axios.post(
-        `https://graph.instagram.com/me/messages`,
+        `https://graph.instagram.com/v20.0/me/messages`,
         {
           recipient: { id: userId },
           message: { text: message }
@@ -31,7 +31,7 @@ export const sendMessages = async (request: Request, response: Response) => {
       );
 
       console.log(sender.data)
-      
+
     // } catch (error: any) {
     //   console.error(`Error sending message to user ${userId}:`, error.response.data);
     // }
