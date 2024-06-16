@@ -12,7 +12,7 @@ declare module 'express-session' {
 }
 
 export const facebookAuth = (request: Request, response: Response) => {
-  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,instagram_basic`;
+  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.USER_FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,instagram_basic`;
   response.redirect(authUrl);
 };
 
@@ -25,9 +25,9 @@ export const facebookCallback = async (request: Request, response: Response) => 
   try {
     const tokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
         params: {
-          client_id: process.env.FACEBOOK_APP_ID as string,
+          client_id: process.env.USER_FACEBOOK_APP_ID as string,
           redirect_uri: REDIRECT_URI,
-          client_secret: process.env.FACEBOOK_APP_SECRET as string,
+          client_secret: process.env.USER_FACEBOOK_APP_SECRET as string,
           code: facebookCode,
         },
       }
@@ -39,8 +39,8 @@ const shortLivedAccessToken = tokenResponse.data.access_token;
 const longLivedTokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
   params: {
     grant_type: 'fb_exchange_token',
-    client_id: process.env.FACEBOOK_APP_ID as string,
-    client_secret: process.env.FACEBOOK_APP_SECRET as string,
+    client_id: process.env.USER_FACEBOOK_APP_ID as string,
+    client_secret: process.env.USER_FACEBOOK_APP_SECRET as string,
     fb_exchange_token: shortLivedAccessToken,
     },
     }

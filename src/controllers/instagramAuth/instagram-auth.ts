@@ -5,16 +5,15 @@ import qs from "qs";
 
 const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
 //"http://localhost:3030/auth/instagram/callback";
-const page_access_token = "EAATYjbga7dkBO1V4MJQYXznmxjXZC3EEVmFyQIDU5ixuloyVLNsFeIbcfd6o9U80i5HMnV4xzKmmUk1XnAHZCmm9NbOuVufJwZCwZAL3TlYUHSCIC4LcSuWOaD3wEAXd0FRvkvdBf7ko92QgsmAaoKwoNzZCBwzawolBEDVVifRdlZB1LPgs7HfQ0YU4g6cVzZA"
 
 export const instagramAuth = async (request: Request, response: Response) => {
-  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
+  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.USER_INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.cookie('user', request.session.user)
   request.session.save(() => {
     response.redirect(authUrl);
   });
 };
-//instagram_manage_messages
+
 export const instagramCallback = async (
   request: Request,
   response: Response
@@ -24,18 +23,17 @@ export const instagramCallback = async (
 
   const instagramCode = request.query.code as string;
 
-  const myCookie = request.cookies.user;
-
   if (!instagramCode) {
+    console.log('yeah')
     return response.redirect("http://localhost:5173/failure");
   }
 
-  
+  console.log('no')
     const tokenResponse = await axios.post(
       "https://api.instagram.com/oauth/access_token",
       qs.stringify({
-        client_id: process.env.INSTAGRAM_APP_ID,
-        client_secret: process.env.INSTAGRAM_APP_SECRET,
+        client_id: process.env.USER_INSTAGRAM_APP_ID,
+        client_secret: process.env.USER_INSTAGRAM_APP_SECRET,
         grant_type: "authorization_code",
         redirect_uri: REDIRECT_URI,
         code: instagramCode,
@@ -47,6 +45,8 @@ export const instagramCallback = async (
       }
     );
 
+    console.log('oops')
+
     const shortLivedAccessToken = tokenResponse.data.access_token;
 
     const instegramUserId = tokenResponse.data.user_id;
@@ -55,11 +55,14 @@ export const instagramCallback = async (
       {
         params: {
           grant_type: "ig_exchange_token",
-          client_secret: process.env.INSTAGRAM_APP_SECRET as string,
+          client_secret: process.env.USER_INSTAGRAM_APP_SECRET as string,
           access_token: shortLivedAccessToken,
         },
       }
     );
+
+    console.log('oopsie')
+
 
     const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
