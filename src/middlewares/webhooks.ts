@@ -24,35 +24,30 @@ export const verifyWebhook = (request: Request, response: Response) => {
 export const handleWebhook = async (request: Request, response: Response) => {
   try {
     const body = request.body;
-console.log('body', body)
-const newBody = body.entry[0].messaging[0]
-const recipientId = newBody.sender.id;
-const messageToSend = "Thank you for reaching out. We will get back to you soon."
 
-console.log('messaging to', newBody)
-    // if (body.object === "instagram") {
-    //   const promises = body.entry.map(async (entry: any) => {
-    //     if (entry.messaging && entry.messaging.length > 0) {
-    //       const message = entry.messaging[0];
-    //       console.log("Message received:", message);
+    if (body.object === "instagram") {
+      const promises = body.entry.map(async (entry: any) => {
+        if (entry.messaging && entry.messaging.length > 0) {
+          const message = entry.messaging[0];
+          console.log("Message received:", message);
 
-    //       const setMessage = "Thank you for reaching out. We will get back to you soon.";
-    //       const recipientId = message.sender.id;
+          const setMessage = "Thank you for reaching out. We will get back to you soon.";
+          const recipientId = message.sender.id;
 
-    //       }
-    //       });
+          try {
+            console.log(`Message sending to ${body.recipient.id}`);
+            await sendMessages(setMessage, recipientId);
+          } catch (sendError:any) {
+            console.error(`Error sending message to ${body.recipient.id}:`, sendError.response ? sendError.response.data : sendError.message);
+          }
+          }
+          });
           
-    //       await Promise.all(promises);
-    //       response.status(200).send("EVENT_RECEIVED");
-    //       } else {
-    //         response.sendStatus(404);
-    //         }
-              try {
-                console.log(`Message sending to ${recipientId}`);
-                await sendMessages(messageToSend, recipientId);
-              } catch (sendError:any) {
-                console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);
-              }
+          await Promise.all(promises);
+          response.status(200).send("EVENT_RECEIVED");
+          } else {
+            response.sendStatus(404);
+            }
   } catch (error: any) {
     console.error("Webhook handling error:", error.response ? error.response.data : error.message);
     response.sendStatus(500);
