@@ -35,10 +35,10 @@ export const handleWebhook = async (request: Request, response: Response) => {
           const recipientId = message.sender.id;
 
           try {
-            console.log(`Message sending to ${body.recipient.id}`);
+            console.log(`Message sending to ${recipientId}`);
             await sendMessages(setMessage, recipientId);
           } catch (sendError:any) {
-            console.error(`Error sending message to ${body.recipient.id}:`, sendError.response ? sendError.response.data : sendError.message);
+            console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);
           }
           }
           });

@@ -33,11 +33,11 @@ const handleWebhook = async (request, response) => {
                     const setMessage = "Thank you for reaching out. We will get back to you soon.";
                     const recipientId = message.sender.id;
                     try {
-                        console.log(`Message sending to ${body.recipient.id}`);
+                        console.log(`Message sending to ${recipientId}`);
                         await (0, sendMessages_1.sendMessages)(setMessage, recipientId);
                     }
                     catch (sendError) {
-                        console.error(`Error sending message to ${body.recipient.id}:`, sendError.response ? sendError.response.data : sendError.message);
+                        console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);
                     }
                 }
             });
