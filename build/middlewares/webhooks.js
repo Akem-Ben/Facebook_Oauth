@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleWebhook = exports.verifyWebhook = void 0;
-const axios_1 = __importDefault(require("axios"));
+const sendMessages_1 = require("../controllers/userControllers/sendMessages");
 // Webhook verification
 const verifyWebhook = (request, response) => {
     const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -19,6 +16,9 @@ const verifyWebhook = (request, response) => {
             response.sendStatus(403);
         }
     }
+    else {
+        response.sendStatus(400);
+    }
 };
 exports.verifyWebhook = verifyWebhook;
 // Webhook endpoint to handle messages
@@ -26,20 +26,23 @@ const handleWebhook = async (request, response) => {
     try {
         const body = request.body;
         if (body.object === "instagram") {
-            body.entry.forEach(async (entry) => {
-                const message = entry.messaging[0];
-                console.log("Message received:", message);
-                const setMessage = "Thank you for reaching out. We will get back to you soon.";
-                const recipientId = message.sender.id;
-                const accessToken = process.env.MY_LONG_ACCESS_TOKEN;
-                const body = {
-                    message: setMessage,
-                    userId: recipientId,
-                    accessToken,
-                };
-                const check = await axios_1.default.post("http://localhost:3030/send-message", body);
-                console.log("check", check.data);
+            const promises = body.entry.map(async (entry) => {
+                if (entry.messaging && entry.messaging.length > 0) {
+                    const message = entry.messaging[0];
+                    console.log("Message received:", message);
+                    const setMessage = "Thank you for reaching out. We will get back to you soon.";
+                    const recipientId = message.sender.id;
+                    const accessToken = process.env.MY_LONG_ACCESS_TOKEN;
+                    try {
+                        await (0, sendMessages_1.sendMessages)(setMessage, recipientId, accessToken);
+                        console.log(`Message sent to ${recipientId}`);
+                    }
+                    catch (sendError) {
+                        console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);
+                    }
+                }
             });
+            await Promise.all(promises);
             response.status(200).send("EVENT_RECEIVED");
         }
         else {
@@ -47,7 +50,7 @@ const handleWebhook = async (request, response) => {
         }
     }
     catch (error) {
-        console.error(error.response);
+        console.error("Webhook handling error:", error.response ? error.response.data : error.message);
         response.sendStatus(500);
     }
 };
