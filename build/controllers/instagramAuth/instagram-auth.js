@@ -57,7 +57,7 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
-        const facebookUser = request.session.user;
+        const facebookUser = request.query.facebook_user;
         console.log('facebook user', facebookUser);
         if ((0, helperFunctions_1.isClient)()) {
             const newUser = localStorage.getItem('userFacebookDetails');

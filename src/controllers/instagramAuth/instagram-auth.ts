@@ -88,7 +88,7 @@ export const instagramCallback = async (
 
     const instagramProfile = profileResponse.data;
 
-    const facebookUser = request.session.user;
+    const facebookUser = request.query.facebook_user;
     console.log('facebook user', facebookUser)
 
   if (isClient()) {
