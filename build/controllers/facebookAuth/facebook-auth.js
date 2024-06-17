@@ -51,7 +51,7 @@ const facebookCallback = async (request, response) => {
             last_name: profile.last_name,
             facebook_access_token: longLivedAccessToken,
         };
-        request.session.user = profile;
+        process.env.FACEBOOK_ID = profile.id;
         const user = await (0, registerUserFacebook_1.registerUserFacebook)(newUser);
         response.redirect(index_1.FACEBOOK_CALLBACK_REDIRECT);
     }

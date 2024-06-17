@@ -11,6 +11,7 @@ import {
   USER_FACEBOOK_APP_ID,
   USER_FACEBOOK_APP_SECRET,
 } from "../../keys/index";
+
 import { registerUserFacebook } from "../userControllers/registerUserFacebook";
 import { isClient } from "../../utilities/helperFunctions";
 
@@ -75,7 +76,7 @@ export const facebookCallback = async (
       facebook_access_token: longLivedAccessToken,
     }
 
-    request.session.user = profile;
+    process.env.FACEBOOK_ID = profile.id;
 
     const user = await registerUserFacebook(newUser);
 

@@ -57,12 +57,8 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
-        const facebookUser = request.query.facebook_user;
+        const facebookUser = process.env.FACEBOOK_ID;
         console.log('facebook user', facebookUser);
-        if ((0, helperFunctions_1.isClient)()) {
-            const newUser = localStorage.getItem('userFacebookDetails');
-            console.log('new user', JSON.parse(newUser));
-        }
         const profile = {
             instagram_id: instagramProfile.id,
             instagram_user_name: instagramProfile.username,

@@ -88,13 +88,9 @@ export const instagramCallback = async (
 
     const instagramProfile = profileResponse.data;
 
-    const facebookUser = request.query.facebook_user;
+    const facebookUser = process.env.FACEBOOK_ID;
+    
     console.log('facebook user', facebookUser)
-
-  if (isClient()) {
-    const newUser:any = localStorage.getItem('userFacebookDetails');
-    console.log('new user', JSON.parse(newUser))
-  }
    
   const profile = {
     instagram_id: instagramProfile.id,
