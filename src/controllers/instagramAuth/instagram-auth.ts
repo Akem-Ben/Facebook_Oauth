@@ -94,7 +94,7 @@ export const instagramCallback = async (
 
     response.redirect(ADMIN_INSTAGRAM_PROFILE_URI);
   } catch (error: any) {
-    console.error("Instagram Auth Error:", error.response.data);
+    console.error("Instagram Auth Error:", error.response);
     response.redirect(ERROR_REDIRECT_URI);
   }
 };

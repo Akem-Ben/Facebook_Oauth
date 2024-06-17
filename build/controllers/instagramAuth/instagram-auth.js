@@ -65,7 +65,7 @@ const instagramCallback = async (request, response) => {
         response.redirect(keys_1.ADMIN_INSTAGRAM_PROFILE_URI);
     }
     catch (error) {
-        console.error("Instagram Auth Error:", error.response.data);
+        console.error("Instagram Auth Error:", error.response);
         response.redirect(keys_1.ERROR_REDIRECT_URI);
     }
 };
