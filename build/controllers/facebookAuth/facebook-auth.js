@@ -57,7 +57,7 @@ const facebookCallback = async (request, response) => {
         response.redirect(index_1.FACEBOOK_CALLBACK_REDIRECT);
     }
     catch (error) {
-        console.error(error.response.data);
+        console.error('facebook callback error', error.response ? error.response.data : error.message);
         response.redirect(index_1.ERROR_REDIRECT_URI);
     }
 };

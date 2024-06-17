@@ -31,7 +31,7 @@ export const getConversations = async (
       const user_message = await axios.get(
         `${GET_MESSAGES_URL}/${msg.id}?fields=id,created_time,from,to,message&access_token=${MY_LONG_LIVED_ACCESS_TOKEN}`
       );
-      
+
       return {
         userName: user_message.data.from.username,
         userId: user_message.data.from.id,
@@ -45,7 +45,7 @@ export const getConversations = async (
 
     return response.status(200).json({ data: details });
   } catch (error: any) {
-    console.log(error.message);
+    console.log('fetch user conversation error', error.response ? error.response.data : error.message)
     return response.status(500).json({ error: error.response.data });
   }
 };

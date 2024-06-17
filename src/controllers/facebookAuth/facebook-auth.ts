@@ -82,7 +82,7 @@ export const facebookCallback = async (
 
     response.redirect(FACEBOOK_CALLBACK_REDIRECT);
   } catch (error: any) {
-    console.error(error.response.data);
+    console.error('facebook callback error', error.response ? error.response.data : error.message);
     response.redirect(ERROR_REDIRECT_URI);
   }
 };

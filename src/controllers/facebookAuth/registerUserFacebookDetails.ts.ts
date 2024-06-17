@@ -2,16 +2,7 @@ import { supabase } from "../../app";
 import { v4 } from 'uuid';
 
 export const registerUserFacebook = async(profile:any) => {
-  // prof {
-//   id: '2113838078997567',
-//   last_name: 'Kick',
-//   email: 'smartkicks01@gmail.com',
-//   first_name: 'Smart',
-//   install_type: 'UNKNOWN',
-//   installed: true,
-//   is_guest_user: false,
-//   name: 'Smart Kick'
-// }
+try{
   const { id,
     last_name,
     email,
@@ -68,4 +59,7 @@ export const registerUserFacebook = async(profile:any) => {
 
     return 'success';
   }
+}catch(error:any){
+  console.log('register user error', error.response ? error.response.data : error.message)
+}
 }

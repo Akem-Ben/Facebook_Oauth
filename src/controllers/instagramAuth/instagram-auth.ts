@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import axios from "axios";
 import dotenv from "dotenv";
+import { JwtPayload } from "jsonwebtoken";
 import qs from "qs";
 import {
   INSTAGRAM_AUTH_URL,
@@ -13,8 +14,9 @@ import {
   INSTAGRAM_PROFILE_URI,
   ADMIN_INSTAGRAM_PROFILE_URI,
 } from "../../keys";
+import { registerUserInstagram } from "./registerUserInstagram";
 
-export const instagramAuth = async (request: Request, response: Response) => {
+export const instagramAuth = async (request: JwtPayload, response: Response) => {
   const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.cookie("user", request.session.user);
   request.session.save(() => {
@@ -23,7 +25,7 @@ export const instagramAuth = async (request: Request, response: Response) => {
 };
 
 export const instagramCallback = async (
-  request: Request,
+  request: JwtPayload,
   response: Response
 ) => {
   try {
@@ -78,23 +80,20 @@ export const instagramCallback = async (
     );
 
     const instagramProfile = profileResponse.data;
+   
+  const user = {
+    instagram_id: instagramProfile.id,
+    instagram_user_name: instagramProfile.username,
+    instagram_account_type: instagramProfile.account_type,
+    instagram_media_count: instagramProfile.media_count,
+    instagram_access_token: longLivedAccessToken
+  }
 
-    console.log('user',instagramProfile)
-    // try {
-    //   await axios.post(
-    //     `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,
-    //     {
-    //       recipient: { id: instagramProfile.id },
-    //       message: { text: "Welcome to our app!" }
-    //     }
-    //   );
-    // } catch (error: any) {
-    //   console.error("Error sending default message:", error.response.data);
-    // }
+  await registerUserInstagram(request, user);
 
     response.redirect(ADMIN_INSTAGRAM_PROFILE_URI);
   } catch (error: any) {
-    console.error("Instagram Auth Error:", error.response);
+    console.error("Instagram Auth Error:", error.response ? error.response.data : error.message);
     response.redirect(ERROR_REDIRECT_URI);
   }
 };

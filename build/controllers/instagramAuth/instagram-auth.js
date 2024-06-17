@@ -7,6 +7,7 @@ exports.instagramCallback = exports.instagramAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
 const qs_1 = __importDefault(require("qs"));
 const keys_1 = require("../../keys");
+const registerUserInstagram_1 = require("./registerUserInstagram");
 const instagramAuth = async (request, response) => {
     const authUrl = `${keys_1.INSTAGRAM_AUTH_URL}?client_id=${keys_1.USER_INSTAGRAM_APP_ID}&redirect_uri=${keys_1.INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
     response.cookie("user", request.session.user);
@@ -50,22 +51,18 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
-        console.log('user', instagramProfile);
-        // try {
-        //   await axios.post(
-        //     `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,
-        //     {
-        //       recipient: { id: instagramProfile.id },
-        //       message: { text: "Welcome to our app!" }
-        //     }
-        //   );
-        // } catch (error: any) {
-        //   console.error("Error sending default message:", error.response.data);
-        // }
+        const user = {
+            instagram_id: instagramProfile.id,
+            instagram_user_name: instagramProfile.username,
+            instagram_account_type: instagramProfile.account_type,
+            instagram_media_count: instagramProfile.media_count,
+            instagram_access_token: longLivedAccessToken
+        };
+        await (0, registerUserInstagram_1.registerUserInstagram)(request, user);
         response.redirect(keys_1.ADMIN_INSTAGRAM_PROFILE_URI);
     }
     catch (error) {
-        console.error("Instagram Auth Error:", error.response);
+        console.error("Instagram Auth Error:", error.response ? error.response.data : error.message);
         response.redirect(keys_1.ERROR_REDIRECT_URI);
     }
 };
