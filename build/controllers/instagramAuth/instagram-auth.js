@@ -50,6 +50,7 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
+        console.log('user', instagramProfile);
         // try {
         //   await axios.post(
         //     `https:///graph.facebook.com/v20.0/me/messages?access_token=${longLivedAccessToken}`,
