@@ -4,24 +4,10 @@ import axios from 'axios';
 
 
 
-export const sendMessages = async (request: Request, response: Response) => {
+export const sendMessages = async (message:string, userId:string, accessToken:string) => {
   try{
-  const { message, userId, accessToken } = request.body;
 
-//   let users;
-//   if (userId) {
-//     users = [{ id: userId }];
-//   } else {
-//     const { data, error } = await supabase.from('instagram_users').select('id');
-//     if (error) {
-//       return response.status(500).send('Error fetching users');
-//     }
-//     users = data;
-//   }
-
-
-    // try {
-    const sender =  await axios.post(
+    const response =  await axios.post(
         `https://graph.instagram.com/v20.0/me/messages`,
         {
           recipient: { id: userId },
@@ -30,11 +16,8 @@ export const sendMessages = async (request: Request, response: Response) => {
         { params: { access_token: accessToken } }
       );
 
-      console.log('sender...',sender.data)
-
-    // } catch (error: any) {
-    //   console.error(`Error sending message to user ${userId}:`, error.response.data);
-    // }
+      console.log('response...',response.data)
+      return response.data
 
   }catch(error:any){
     console.log(error.response)
