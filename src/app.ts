@@ -27,9 +27,13 @@ app.use(cors());
 
 app.use(
   session({
-    secret: `${APP_KEY}`,
+    secret: APP_KEY,
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      secure: true, // Set to true if using HTTPS
+      maxAge: 60000 // Adjust as needed
+    }
   })
 );
 

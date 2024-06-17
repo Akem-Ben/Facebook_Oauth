@@ -27,9 +27,13 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)());
 app.use((0, express_session_1.default)({
-    secret: `${keys_1.APP_KEY}`,
+    secret: keys_1.APP_KEY,
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        secure: true, // Set to true if using HTTPS
+        maxAge: 60000 // Adjust as needed
+    }
 }));
 app.use("/", facebookRoutes_1.default);
 (0, scheduler_1.scheduler)();

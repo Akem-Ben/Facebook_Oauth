@@ -80,22 +80,15 @@ export const facebookCallback = async (
 
     request.session.accessToken = longLivedAccessToken;
 
-    response.redirect(FACEBOOK_CALLBACK_REDIRECT);
+
+    request.session.save(err => {
+      if (err) {
+        console.error('Session save error:', err);
+      }
+      response.redirect(FACEBOOK_CALLBACK_REDIRECT);
+    });
   } catch (error: any) {
     console.error('facebook callback error', error.response ? error.response.data : error.message);
     response.redirect(ERROR_REDIRECT_URI);
   }
 };
-
-// prof {
-//   id: '2113838078997567',
-//   last_name: 'Kick',
-//   email: 'smartkicks01@gmail.com', email
-//   first_name: 'Smart',
-//   install_type: 'UNKNOWN',
-//   installed: true,
-//   is_guest_user: false,
-//   name: 'Smart Kick'
-//instagram_graph_user_profile
-// }user_messenger_contact
-// &config_id=${2564397997087876}
