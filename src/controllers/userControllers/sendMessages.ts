@@ -15,7 +15,7 @@ export const sendMessages = async (usermessage:string, userId:string) => {
       message: { text: usermessage }
     }
 
-    console.log('body', body)
+    // console.log('body', body)
 
     console.log('token', accessToken)
 
