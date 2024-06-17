@@ -1,10 +1,19 @@
-import { Request, Response } from 'express';
-import axios from 'axios';
-import 'express-session';
+import { Request, Response } from "express";
+import axios from "axios";
+import "express-session";
+import {
+  ERROR_REDIRECT_URI,
+  FACEBOOK_AUTH_URL,
+  FACEBOOK_AUTH_REDIRECT_URI,
+  FACEBOOK_TOKEN_URI,
+  FACEBOOK_PROFILE_URI,
+  FACEBOOK_CALLBACK_REDIRECT,
+  USER_FACEBOOK_APP_ID,
+  USER_FACEBOOK_APP_SECRET,
+} from "../../keys/index";
+import { registerUserFacebook } from "../userControllers/registerUserFacebook";
 
-const REDIRECT_URI = "http://localhost:3030/auth/facebook/callback";
-
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
     accessToken: string;
     user: any;
@@ -12,43 +21,43 @@ declare module 'express-session' {
 }
 
 export const facebookAuth = (request: Request, response: Response) => {
-  const authUrl = `https://www.facebook.com/v10.0/dialog/oauth?client_id=${process.env.USER_FACEBOOK_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=email,public_profile,instagram_basic`;
+  const authUrl = `${FACEBOOK_AUTH_URL}?client_id=${USER_FACEBOOK_APP_ID}&redirect_uri=${FACEBOOK_AUTH_REDIRECT_URI}&scope=email,public_profile,instagram_basic`;
   response.redirect(authUrl);
 };
 
-export const facebookCallback = async (request: Request, response: Response) => {
+export const facebookCallback = async (
+  request: Request,
+  response: Response
+) => {
   const facebookCode = request.query.code as string;
   if (!facebookCode) {
-    return response.redirect('http://localhost:5173/failure');
+    return response.redirect(ERROR_REDIRECT_URI);
   }
 
   try {
-    const tokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
-        params: {
-          client_id: process.env.USER_FACEBOOK_APP_ID as string,
-          redirect_uri: REDIRECT_URI,
-          client_secret: process.env.USER_FACEBOOK_APP_SECRET as string,
-          code: facebookCode,
-        },
-      }
-    );
+    const tokenResponse = await axios.get(FACEBOOK_TOKEN_URI, {
+      params: {
+        client_id: USER_FACEBOOK_APP_ID,
+        redirect_uri: FACEBOOK_AUTH_REDIRECT_URI,
+        client_secret: USER_FACEBOOK_APP_SECRET,
+        code: facebookCode,
+      },
+    });
 
-const shortLivedAccessToken = tokenResponse.data.access_token;
+    const shortLivedAccessToken = tokenResponse.data.access_token;
 
+    const longLivedTokenResponse = await axios.get(FACEBOOK_TOKEN_URI, {
+      params: {
+        grant_type: "fb_exchange_token",
+        client_id: USER_FACEBOOK_APP_ID,
+        client_secret: USER_FACEBOOK_APP_SECRET,
+        fb_exchange_token: shortLivedAccessToken,
+      },
+    });
 
-const longLivedTokenResponse = await axios.get(`https://graph.facebook.com/v10.0/oauth/access_token`, {
-  params: {
-    grant_type: 'fb_exchange_token',
-    client_id: process.env.USER_FACEBOOK_APP_ID as string,
-    client_secret: process.env.USER_FACEBOOK_APP_SECRET as string,
-    fb_exchange_token: shortLivedAccessToken,
-    },
-    }
-    );
-    
     const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
-    const profileResponse = await axios.get(`https://graph.facebook.com/me`, {
+    const profileResponse = await axios.get(FACEBOOK_PROFILE_URI, {
       params: {
         access_token: longLivedAccessToken,
         fields: "id,last_name,email,first_name,gender,middle_name",
@@ -57,19 +66,26 @@ const longLivedTokenResponse = await axios.get(`https://graph.facebook.com/v10.0
 
     const profile = profileResponse.data;
 
+    const newUser = {
+      facebook_id: profile.id,
+      email: profile.email, 
+      first_name: profile.first_name, 
+      last_name: profile.last_name,
+      facebook_access_token: longLivedAccessToken,
+    }
+
+    const user = await registerUserFacebook(newUser);
+
     request.session.user = profile;
 
     request.session.accessToken = longLivedAccessToken;
 
-      response.redirect('http://localhost:3030/auth/instagram');
-
+    response.redirect(FACEBOOK_CALLBACK_REDIRECT);
   } catch (error: any) {
     console.error(error.response.data);
-    response.redirect('http://localhost:5173/failure');
+    response.redirect(ERROR_REDIRECT_URI);
   }
 };
-
-
 
 // prof {
 //   id: '2113838078997567',

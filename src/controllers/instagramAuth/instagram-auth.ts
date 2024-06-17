@@ -2,13 +2,21 @@ import { Request, Response } from "express";
 import axios from "axios";
 import dotenv from "dotenv";
 import qs from "qs";
-
-const REDIRECT_URI = "https://facebook-oauth-ihe6.onrender.com/auth/instagram/callback";
-//"http://localhost:3030/auth/instagram/callback";
+import {
+  INSTAGRAM_AUTH_URL,
+  USER_INSTAGRAM_APP_ID,
+  INSTAGRAM_AUTH_REDIRECT_URI,
+  ERROR_REDIRECT_URI,
+  INSTAGRAM_SHORT_LIVED_ACCESS_TOKEN_URI,
+  USER_INSTAGRAM_APP_SECRET,
+  INSTAGRAM_LONG_LIVED_ACCESS_TOKEN_URI,
+  INSTAGRAM_PROFILE_URI,
+  ADMIN_INSTAGRAM_PROFILE_URI,
+} from "../../keys";
 
 export const instagramAuth = async (request: Request, response: Response) => {
-  const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.USER_INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
-  response.cookie('user', request.session.user)
+  const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
+  response.cookie("user", request.session.user);
   request.session.save(() => {
     response.redirect(authUrl);
   });
@@ -19,20 +27,20 @@ export const instagramCallback = async (
   response: Response
 ) => {
   try {
-  console.log('Session in instagramCallback:', request.session); 
+    console.log("Session in instagramCallback:", request.session);
 
-  const instagramCode = request.query.code as string;
+    const instagramCode = request.query.code as string;
 
-  if (!instagramCode) {
-    return response.redirect("http://localhost:5173/failure");
-  }
+    if (!instagramCode) {
+      return response.redirect(ERROR_REDIRECT_URI);
+    }
     const tokenResponse = await axios.post(
-      "https://api.instagram.com/oauth/access_token",
+      INSTAGRAM_SHORT_LIVED_ACCESS_TOKEN_URI,
       qs.stringify({
-        client_id: process.env.USER_INSTAGRAM_APP_ID,
-        client_secret: process.env.USER_INSTAGRAM_APP_SECRET,
+        client_id: USER_INSTAGRAM_APP_ID,
+        client_secret: USER_INSTAGRAM_APP_SECRET,
         grant_type: "authorization_code",
-        redirect_uri: REDIRECT_URI,
+        redirect_uri: INSTAGRAM_AUTH_REDIRECT_URI,
         code: instagramCode,
       }),
       {
@@ -46,20 +54,21 @@ export const instagramCallback = async (
 
     const instegramUserId = tokenResponse.data.user_id;
 
-    const longLivedTokenResponse = await axios.get(`https://graph.instagram.com/access_token`,
+    const longLivedTokenResponse = await axios.get(
+      INSTAGRAM_LONG_LIVED_ACCESS_TOKEN_URI,
       {
         params: {
           grant_type: "ig_exchange_token",
-          client_secret: process.env.USER_INSTAGRAM_APP_SECRET as string,
+          client_secret: USER_INSTAGRAM_APP_SECRET,
           access_token: shortLivedAccessToken,
         },
       }
     );
 
-
     const longLivedAccessToken = longLivedTokenResponse.data.access_token;
 
-    const profileResponse = await axios.get(`https://graph.instagram.com/${instegramUserId}`,
+    const profileResponse = await axios.get(
+      `${INSTAGRAM_PROFILE_URI}/${instegramUserId}`,
       {
         params: {
           access_token: longLivedAccessToken,
@@ -81,9 +90,9 @@ export const instagramCallback = async (
     //   console.error("Error sending default message:", error.response.data);
     // }
 
-    response.redirect("https://ig.me/m/_akemini_");
+    response.redirect(ADMIN_INSTAGRAM_PROFILE_URI);
   } catch (error: any) {
     console.error("Instagram Auth Error:", error.response.data);
-    response.redirect("http://localhost:5173/failure");
+    response.redirect(ERROR_REDIRECT_URI);
   }
 };

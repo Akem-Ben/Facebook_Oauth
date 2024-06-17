@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatDate = exports.formatTimeFromISO = void 0;
-function formatTimeFromISO(isoString) {
+export function formatTimeFromISO(isoString: Date): string {
     // Parse the ISO string to a Date object
     const date = new Date(isoString);
     // Extract hours and minutes
@@ -16,13 +13,13 @@ function formatTimeFromISO(isoString) {
     // Combine into final formatted string
     const formattedTime = `${hours}:${minutesStr}${ampm}`;
     return formattedTime;
-}
-exports.formatTimeFromISO = formatTimeFromISO;
-const formatDate = (isoString) => {
+  }
+  
+  export const formatDate = (isoString: Date): string => {
     const date = new Date(isoString);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
+  
     return `${day}-${month}-${year}`;
-};
-exports.formatDate = formatDate;
+  };

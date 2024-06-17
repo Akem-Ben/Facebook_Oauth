@@ -2,14 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleWebhook = exports.verifyWebhook = void 0;
 const sendMessages_1 = require("../controllers/userControllers/sendMessages");
+const keys_1 = require("../keys");
+const app_1 = require("../app");
 // Webhook verification
 const verifyWebhook = (request, response) => {
-    const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
     const mode = request.query["hub.mode"];
     const token = request.query["hub.verify_token"];
     const challenge = request.query["hub.challenge"];
     if (mode && token) {
-        if (mode === "subscribe" && token === VERIFY_TOKEN) {
+        if (mode === "subscribe" && token === keys_1.VERIFY_TOKEN) {
             response.status(200).send(challenge);
         }
         else {
@@ -21,7 +22,7 @@ const verifyWebhook = (request, response) => {
     }
 };
 exports.verifyWebhook = verifyWebhook;
-// Webhook endpoint to handle messages
+// Webhook endpoint to handle first time messages
 const handleWebhook = async (request, response) => {
     try {
         const body = request.body;
@@ -29,12 +30,23 @@ const handleWebhook = async (request, response) => {
             const promises = body.entry.map(async (entry) => {
                 if (entry.messaging && entry.messaging.length > 0) {
                     const message = entry.messaging[0];
-                    console.log("Message received:", message);
+                    let checkUserId = message.sender.id;
+                    if (checkUserId === keys_1.ADMIN_SCOPED_ID) {
+                        return;
+                    }
+                    const { data: findUser, error: findUserError } = await app_1.supabase
+                        .from('users')
+                        .select('*')
+                        .eq('instagram_scoped_id', checkUserId)
+                        .single();
+                    if (findUser) {
+                        return;
+                    }
                     const setMessage = "Thank you for reaching out. We will get back to you soon.";
                     const recipientId = message.sender.id;
+                    let user;
                     try {
-                        console.log(`Message sending to ${recipientId}`);
-                        await (0, sendMessages_1.sendMessages)(setMessage, recipientId);
+                        return user = await (0, sendMessages_1.sendMessages)(setMessage, recipientId);
                     }
                     catch (sendError) {
                         console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);
@@ -42,7 +54,7 @@ const handleWebhook = async (request, response) => {
                 }
             });
             await Promise.all(promises);
-            response.status(200).send("EVENT_RECEIVED");
+            return response.status(200).json({ message: "EVENT_RECEIVED" });
         }
         else {
             response.sendStatus(404);

@@ -5,15 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMessages = void 0;
 const axios_1 = __importDefault(require("axios"));
+const keys_1 = require("../../keys");
 const sendMessages = async (usermessage, userId) => {
     try {
-        const accessToken = process.env.MY_LONG_ACCESS_TOKEN;
+        const accessToken = keys_1.MY_LONG_LIVED_ACCESS_TOKEN;
         let body = {
             platform: "instagram",
             recipient: { id: userId },
             message: { text: usermessage }
         };
-        const response = await axios_1.default.post(`https://graph.facebook.com/v20.0/me/messages?access_token=${accessToken}`, JSON.stringify(body), {
+        // const { data: findUser, error: findUserError } = await supabase
+        //       .from('users')
+        //       .select('*')
+        //       .eq('instagram_scoped_id', checkUserId)
+        //       .single();
+        const response = await axios_1.default.post(`${keys_1.MESSAGE_SENDING_URL}?access_token=${accessToken}`, JSON.stringify(body), {
             headers: {
                 'Content-Type': 'application/json'
             }

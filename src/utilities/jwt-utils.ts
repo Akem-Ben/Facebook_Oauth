@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { APP_SECRET } from '.';
+import { APP_SECRET } from '../keys';
 
 const JWT_SECRET = 'your_secret_key'; // Use a strong, secure key
 
