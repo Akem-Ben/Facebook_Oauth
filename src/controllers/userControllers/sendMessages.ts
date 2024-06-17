@@ -29,6 +29,6 @@ export const sendMessages = async (usermessage:string, userId:string) => {
       return response.data
 
   }catch(error:any){
-    console.log(error.response)
+    console.log(error.response.data)
   }
 }

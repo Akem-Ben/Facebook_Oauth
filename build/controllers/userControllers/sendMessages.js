@@ -24,7 +24,7 @@ const sendMessages = async (usermessage, userId) => {
         return response.data;
     }
     catch (error) {
-        console.log(error.response);
+        console.log(error.response.data);
     }
 };
 exports.sendMessages = sendMessages;
