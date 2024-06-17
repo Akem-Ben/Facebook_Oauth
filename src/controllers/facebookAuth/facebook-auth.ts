@@ -76,17 +76,9 @@ export const facebookCallback = async (
 
     const user = await registerUserFacebook(newUser);
 
-    request.session.user = profile;
+    localStorage.setItem('userFacebookDetails', JSON.stringify(profile));
 
-    request.session.accessToken = longLivedAccessToken;
-
-
-    request.session.save(err => {
-      if (err) {
-        console.error('Session save error:', err);
-      }
       response.redirect(FACEBOOK_CALLBACK_REDIRECT);
-    });
   } catch (error: any) {
     console.error('facebook callback error', error.response ? error.response.data : error.message);
     response.redirect(ERROR_REDIRECT_URI);

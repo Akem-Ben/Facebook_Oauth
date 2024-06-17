@@ -10,18 +10,13 @@ const keys_1 = require("../../keys");
 const registerUserInstagram_1 = require("./registerUserInstagram");
 const instagramAuth = async (request, response) => {
     const authUrl = `${keys_1.INSTAGRAM_AUTH_URL}?client_id=${keys_1.USER_INSTAGRAM_APP_ID}&redirect_uri=${keys_1.INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
-    response.cookie("user", request.session.user);
-    response.cookie("accessToken", request.session.accessToken);
-    request.session.save(() => {
-        response.redirect(authUrl);
-    });
+    response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
     try {
-        const facebook_details = request.cookies.user;
-        const facebook_access_token = request.cookies.accessToken;
-        console.log('facebook details', facebook_details, facebook_access_token);
+        const facebook_details = localStorage.getItem('userFacebookDetails');
+        console.log('facebook details', JSON.parse(facebook_details));
         const instagramCode = request.query.code;
         if (!instagramCode) {
             return response.redirect(keys_1.ERROR_REDIRECT_URI);
