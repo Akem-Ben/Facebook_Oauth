@@ -49,8 +49,6 @@ export const handleWebhook = async (request: Request, response: Response) => {
             }
           }
         );
-
-        console.log("check", check.data);
       });
       response.status(200).send("EVENT_RECEIVED");
     } else {

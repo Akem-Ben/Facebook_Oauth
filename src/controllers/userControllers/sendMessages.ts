@@ -30,7 +30,7 @@ export const sendMessages = async (request: Request, response: Response) => {
         { params: { access_token: accessToken } }
       );
 
-      console.log(sender.data)
+      console.log('sender...',sender.data)
 
     // } catch (error: any) {
     //   console.error(`Error sending message to user ${userId}:`, error.response.data);
