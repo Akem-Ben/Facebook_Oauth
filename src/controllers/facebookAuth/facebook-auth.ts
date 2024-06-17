@@ -75,11 +75,9 @@ export const facebookCallback = async (
       facebook_access_token: longLivedAccessToken,
     }
 
-    const user = await registerUserFacebook(newUser);
+    request.session.user = profile;
 
-    if (isClient()) {
-      localStorage.setItem('userFacebookDetails', JSON.stringify(profile));
-    }
+    const user = await registerUserFacebook(newUser);
 
       response.redirect(FACEBOOK_CALLBACK_REDIRECT);
   } catch (error: any) {

@@ -18,7 +18,12 @@ import { registerUserInstagram } from "./registerUserInstagram";
 import { isClient } from "../../utilities/helperFunctions";
 
 export const instagramAuth = async (request: JwtPayload, response: Response) => {
-  const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
+  const facebookUser = request.session.user;
+  if (isClient()) {
+    localStorage.setItem('userFacebookDetails', JSON.stringify(facebookUser));
+  }
+  console.log('facebook user', facebookUser)
+  const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code&facebook_user=${encodeURIComponent(JSON.stringify(facebookUser))}`;
     response.redirect(authUrl);
 };
 
@@ -32,7 +37,7 @@ export const instagramCallback = async (
       const facebook_details:any = localStorage.getItem('userFacebookDetails');
     console.log('facebook details', JSON.parse(facebook_details))
     }
-    
+
     const instagramCode = request.query.code as string;
 
     if (!instagramCode) {
@@ -82,6 +87,14 @@ export const instagramCallback = async (
     );
 
     const instagramProfile = profileResponse.data;
+
+    const facebookUser = request.session.user;
+    console.log('facebook user', facebookUser)
+
+  if (isClient()) {
+    const newUser:any = localStorage.getItem('userFacebookDetails');
+    console.log('new user', JSON.parse(newUser))
+  }
    
   const profile = {
     instagram_id: instagramProfile.id,
