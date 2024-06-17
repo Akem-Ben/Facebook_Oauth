@@ -33,11 +33,10 @@ export const handleWebhook = async (request: Request, response: Response) => {
 
           const setMessage = "Thank you for reaching out. We will get back to you soon.";
           const recipientId = message.sender.id;
-          const accessToken = process.env.MY_LONG_ACCESS_TOKEN as string;
 
           try {
-            await sendMessages(setMessage, recipientId, accessToken);
-            console.log(`Message sent to ${recipientId}`);
+            console.log(`Message sending to ${recipientId}`);
+            await sendMessages(setMessage, recipientId);
           } catch (sendError:any) {
             console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);
           }
