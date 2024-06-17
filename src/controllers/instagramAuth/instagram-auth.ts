@@ -19,6 +19,7 @@ import { registerUserInstagram } from "./registerUserInstagram";
 export const instagramAuth = async (request: JwtPayload, response: Response) => {
   const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.cookie("user", request.session.user);
+  registerUserInstagram(request);
   request.session.save(() => {
     response.redirect(authUrl);
   });
@@ -81,7 +82,7 @@ export const instagramCallback = async (
 
     const instagramProfile = profileResponse.data;
    
-  const user = {
+  const profile = {
     instagram_id: instagramProfile.id,
     instagram_user_name: instagramProfile.username,
     instagram_account_type: instagramProfile.account_type,
@@ -89,7 +90,7 @@ export const instagramCallback = async (
     instagram_access_token: longLivedAccessToken
   }
 
-  await registerUserInstagram(request, user);
+  await registerUserInstagram(profile);
 
     response.redirect(ADMIN_INSTAGRAM_PROFILE_URI);
   } catch (error: any) {

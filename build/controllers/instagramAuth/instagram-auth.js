@@ -11,6 +11,7 @@ const registerUserInstagram_1 = require("./registerUserInstagram");
 const instagramAuth = async (request, response) => {
     const authUrl = `${keys_1.INSTAGRAM_AUTH_URL}?client_id=${keys_1.USER_INSTAGRAM_APP_ID}&redirect_uri=${keys_1.INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
     response.cookie("user", request.session.user);
+    (0, registerUserInstagram_1.registerUserInstagram)(request);
     request.session.save(() => {
         response.redirect(authUrl);
     });
@@ -51,14 +52,14 @@ const instagramCallback = async (request, response) => {
             },
         });
         const instagramProfile = profileResponse.data;
-        const user = {
+        const profile = {
             instagram_id: instagramProfile.id,
             instagram_user_name: instagramProfile.username,
             instagram_account_type: instagramProfile.account_type,
             instagram_media_count: instagramProfile.media_count,
             instagram_access_token: longLivedAccessToken
         };
-        await (0, registerUserInstagram_1.registerUserInstagram)(request, user);
+        await (0, registerUserInstagram_1.registerUserInstagram)(profile);
         response.redirect(keys_1.ADMIN_INSTAGRAM_PROFILE_URI);
     }
     catch (error) {

@@ -4,7 +4,7 @@ exports.registerUserInstagram = void 0;
 const registerUserInstagram = async (request, profile) => {
     try {
         const { instagram_id, instagram_user_name, instagram_account_type, instagram_media_count, instagram_access_token } = profile;
-        console.log('session', request.session);
+        console.log('session', request?.session);
         console.log('prof', profile);
         //   const { data: findAdmin, error: findAdminError } = await supabase
         //     .from('users')
