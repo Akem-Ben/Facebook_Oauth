@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatDate = exports.formatTimeFromISO = void 0;
+exports.isClient = exports.formatDate = exports.formatTimeFromISO = void 0;
 function formatTimeFromISO(isoString) {
     // Parse the ISO string to a Date object
     const date = new Date(isoString);
@@ -26,3 +26,7 @@ const formatDate = (isoString) => {
     return `${day}-${month}-${year}`;
 };
 exports.formatDate = formatDate;
+const isClient = () => {
+    return typeof window !== 'undefined' && 'localStorage' in window;
+};
+exports.isClient = isClient;

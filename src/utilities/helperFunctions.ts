@@ -23,3 +23,7 @@ export function formatTimeFromISO(isoString: Date): string {
   
     return `${day}-${month}-${year}`;
   };
+
+export const isClient = () => {
+  return typeof window !== 'undefined' && 'localStorage' in window;
+};

@@ -12,6 +12,7 @@ import {
   USER_FACEBOOK_APP_SECRET,
 } from "../../keys/index";
 import { registerUserFacebook } from "../userControllers/registerUserFacebook";
+import { isClient } from "../../utilities/helperFunctions";
 
 declare module "express-session" {
   interface SessionData {
@@ -76,7 +77,9 @@ export const facebookCallback = async (
 
     const user = await registerUserFacebook(newUser);
 
-    localStorage.setItem('userFacebookDetails', JSON.stringify(profile));
+    if (isClient()) {
+      localStorage.setItem('userFacebookDetails', JSON.stringify(profile));
+    }
 
       response.redirect(FACEBOOK_CALLBACK_REDIRECT);
   } catch (error: any) {

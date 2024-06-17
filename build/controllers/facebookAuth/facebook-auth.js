@@ -8,6 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 require("express-session");
 const index_1 = require("../../keys/index");
 const registerUserFacebook_1 = require("../userControllers/registerUserFacebook");
+const helperFunctions_1 = require("../../utilities/helperFunctions");
 const facebookAuth = (request, response) => {
     const authUrl = `${index_1.FACEBOOK_AUTH_URL}?client_id=${index_1.USER_FACEBOOK_APP_ID}&redirect_uri=${index_1.FACEBOOK_AUTH_REDIRECT_URI}&scope=email,public_profile,instagram_basic`;
     response.redirect(authUrl);
@@ -52,7 +53,9 @@ const facebookCallback = async (request, response) => {
             facebook_access_token: longLivedAccessToken,
         };
         const user = await (0, registerUserFacebook_1.registerUserFacebook)(newUser);
-        localStorage.setItem('userFacebookDetails', JSON.stringify(profile));
+        if ((0, helperFunctions_1.isClient)()) {
+            localStorage.setItem('userFacebookDetails', JSON.stringify(profile));
+        }
         response.redirect(index_1.FACEBOOK_CALLBACK_REDIRECT);
     }
     catch (error) {

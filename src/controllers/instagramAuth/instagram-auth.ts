@@ -15,6 +15,7 @@ import {
   ADMIN_INSTAGRAM_PROFILE_URI,
 } from "../../keys";
 import { registerUserInstagram } from "./registerUserInstagram";
+import { isClient } from "../../utilities/helperFunctions";
 
 export const instagramAuth = async (request: JwtPayload, response: Response) => {
   const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
@@ -27,10 +28,11 @@ export const instagramCallback = async (
 ) => {
   try {
 
-    const facebook_details:any = localStorage.getItem('userFacebookDetails')
-
+    if (isClient()) {
+      const facebook_details:any = localStorage.getItem('userFacebookDetails');
     console.log('facebook details', JSON.parse(facebook_details))
-
+    }
+    
     const instagramCode = request.query.code as string;
 
     if (!instagramCode) {
