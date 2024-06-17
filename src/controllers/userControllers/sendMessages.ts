@@ -10,6 +10,7 @@ export const sendMessages = async (usermessage:string, userId:string) => {
     const accessToken = process.env.MY_LONG_ACCESS_TOKEN as string;
 
     let body = {
+      platform: "instagram",
       recipient: { id: userId },
       message: { text: usermessage }
     }
@@ -18,9 +19,13 @@ export const sendMessages = async (usermessage:string, userId:string) => {
 
     console.log('token', accessToken)
 
-    const response =  await axios.post(`https://graph.instagram.com/v20.0/me/messages?access_token=${accessToken}`, body);
+    const response =  await axios.post(`https://graph.instagram.com/v20.0/me/messages?access_token=${accessToken}`, JSON.stringify(body),{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-      console.log('response...',response.data)
+      // console.log('response...',response.data)
       return response.data
 
   }catch(error:any){

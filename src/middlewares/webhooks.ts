@@ -24,7 +24,7 @@ export const verifyWebhook = (request: Request, response: Response) => {
 export const handleWebhook = async (request: Request, response: Response) => {
   try {
     const body = request.body;
-
+console.log('body', body)
     if (body.object === "instagram") {
       const promises = body.entry.map(async (entry: any) => {
         if (entry.messaging && entry.messaging.length > 0) {
