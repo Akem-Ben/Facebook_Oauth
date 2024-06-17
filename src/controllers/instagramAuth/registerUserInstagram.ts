@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
-export const registerUserInstagram = async(request?:JwtPayload, profile?:any) => {
+export const registerUserInstagram = async(profile?:any) => {
 try{
   const { instagram_id,
     instagram_user_name,
@@ -11,7 +11,6 @@ try{
     instagram_media_count,
     instagram_access_token } = profile;
 
-    console.log('session', request?.session)
     console.log('prof', profile)
 
 //   const { data: findAdmin, error: findAdminError } = await supabase

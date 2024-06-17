@@ -19,7 +19,7 @@ import { registerUserInstagram } from "./registerUserInstagram";
 export const instagramAuth = async (request: JwtPayload, response: Response) => {
   const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
   response.cookie("user", request.session.user);
-  registerUserInstagram(request);
+  response.cookie("accessToken", request.session.accessToken);
   request.session.save(() => {
     response.redirect(authUrl);
   });
@@ -30,7 +30,11 @@ export const instagramCallback = async (
   response: Response
 ) => {
   try {
-    console.log("Session in instagramCallback:", request.session);
+
+    const facebook_details = request.cookies.user
+    const facebook_access_token = request.cookies.accessToken
+
+    console.log('facebook details', facebook_details, facebook_access_token)
 
     const instagramCode = request.query.code as string;
 
