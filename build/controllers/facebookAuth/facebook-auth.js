@@ -42,15 +42,6 @@ const facebookCallback = async (request, response) => {
                 fields: "id,last_name,email,first_name,gender,middle_name",
             },
         });
-        // const profile = profileResponse.data;
-        // const newUser = {
-        //   facebook_id: profile.id,
-        //   email: profile.email, 
-        //   first_name: profile.first_name, 
-        //   last_name: profile.last_name,
-        //   facebook_access_token: longLivedAccessToken,
-        // }
-        // const user = await registerUserFacebook(newUser);
         response.redirect(index_1.FACEBOOK_CALLBACK_REDIRECT);
     }
     catch (error) {

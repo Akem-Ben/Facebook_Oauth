@@ -72,9 +72,7 @@ export const handleWebhook = async (request: Request, response: Response) => {
     
                 if (updateUserError) {
                   console.error('Error updating user:', updateUserError.message);
-                  return 'error';
                 }
-                return;
               }
 
           const setMessage =

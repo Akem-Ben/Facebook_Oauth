@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import axios from "axios";
-import dotenv from "dotenv";
 import { JwtPayload } from "jsonwebtoken";
 import qs from "qs";
 import {
@@ -15,15 +14,9 @@ import {
   ADMIN_INSTAGRAM_PROFILE_URI,
 } from "../../keys";
 import { registerUserInstagram } from "./registerUserInstagram";
-import { isClient } from "../../utilities/helperFunctions";
 
 export const instagramAuth = async (request: JwtPayload, response: Response) => {
-  const facebookUser = request.session.user;
-  if (isClient()) {
-    localStorage.setItem('userFacebookDetails', JSON.stringify(facebookUser));
-  }
-  console.log('facebook user', facebookUser)
-  const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code&facebook_user=${encodeURIComponent(JSON.stringify(facebookUser))}`;
+  const authUrl = `${INSTAGRAM_AUTH_URL}?client_id=${USER_INSTAGRAM_APP_ID}&redirect_uri=${INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code&`;
     response.redirect(authUrl);
 };
 
@@ -32,11 +25,6 @@ export const instagramCallback = async (
   response: Response
 ) => {
   try {
-
-    if (isClient()) {
-      const facebook_details:any = localStorage.getItem('userFacebookDetails');
-    console.log('facebook details', JSON.parse(facebook_details))
-    }
 
     const instagramCode = request.query.code as string;
 

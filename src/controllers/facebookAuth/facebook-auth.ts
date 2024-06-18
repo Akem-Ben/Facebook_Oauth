@@ -66,19 +66,6 @@ export const facebookCallback = async (
       },
     });
 
-    // const profile = profileResponse.data;
-
-    // const newUser = {
-    //   facebook_id: profile.id,
-    //   email: profile.email, 
-    //   first_name: profile.first_name, 
-    //   last_name: profile.last_name,
-    //   facebook_access_token: longLivedAccessToken,
-    // }
-
-
-    // const user = await registerUserFacebook(newUser);
-
       response.redirect(FACEBOOK_CALLBACK_REDIRECT);
   } catch (error: any) {
     console.error('facebook callback error', error.response ? error.response.data : error.message);

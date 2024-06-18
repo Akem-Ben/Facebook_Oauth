@@ -64,9 +64,7 @@ const handleWebhook = async (request, response) => {
                             .eq('instagram_user_name', userDetails.username);
                         if (updateUserError) {
                             console.error('Error updating user:', updateUserError.message);
-                            return 'error';
                         }
-                        return;
                     }
                     const setMessage = `Thank you for reaching out. We will get back to you soon. Please visit our site on www.me.ng to register and be included in our database. ${!userDetails.is_user_follow_business ? "Please follow our account to get new updates." : ""}`;
                     const recipientId = message.sender.id;

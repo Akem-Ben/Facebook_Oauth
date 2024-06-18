@@ -8,23 +8,13 @@ const axios_1 = __importDefault(require("axios"));
 const qs_1 = __importDefault(require("qs"));
 const keys_1 = require("../../keys");
 const registerUserInstagram_1 = require("./registerUserInstagram");
-const helperFunctions_1 = require("../../utilities/helperFunctions");
 const instagramAuth = async (request, response) => {
-    const facebookUser = request.session.user;
-    if ((0, helperFunctions_1.isClient)()) {
-        localStorage.setItem('userFacebookDetails', JSON.stringify(facebookUser));
-    }
-    console.log('facebook user', facebookUser);
-    const authUrl = `${keys_1.INSTAGRAM_AUTH_URL}?client_id=${keys_1.USER_INSTAGRAM_APP_ID}&redirect_uri=${keys_1.INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code&facebook_user=${encodeURIComponent(JSON.stringify(facebookUser))}`;
+    const authUrl = `${keys_1.INSTAGRAM_AUTH_URL}?client_id=${keys_1.USER_INSTAGRAM_APP_ID}&redirect_uri=${keys_1.INSTAGRAM_AUTH_REDIRECT_URI}&scope=user_profile,user_media&response_type=code&`;
     response.redirect(authUrl);
 };
 exports.instagramAuth = instagramAuth;
 const instagramCallback = async (request, response) => {
     try {
-        if ((0, helperFunctions_1.isClient)()) {
-            const facebook_details = localStorage.getItem('userFacebookDetails');
-            console.log('facebook details', JSON.parse(facebook_details));
-        }
         const instagramCode = request.query.code;
         if (!instagramCode) {
             return response.redirect(keys_1.ERROR_REDIRECT_URI);
