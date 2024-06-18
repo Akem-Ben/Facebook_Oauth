@@ -39,20 +39,24 @@ const handleWebhook = async (request, response) => {
                         return;
                     }
                     const { data: findScopedId, error: findScopedIdError } = await app_1.supabase
-                        .from('users')
-                        .select('*')
-                        .eq('instagram_scoped_id', checkUserId)
+                        .from("users")
+                        .select("*")
+                        .eq("instagram_scoped_id", checkUserId)
                         .single();
                     if (findScopedId) {
                         return;
                     }
-                    const findUser = await axios_1.default.get(`${keys_1.FETCH_USER_PROFILE_URL}/${checkUserId}?fields=name,username,is_user_follow_business,is_business_follow_user`);
+                    const findUser = await axios_1.default.get(`${keys_1.FETCH_USER_PROFILE_URL}/${checkUserId}?fields=name,username,is_user_follow_business,is_business_follow_user`, {
+                        params: {
+                            access_token: keys_1.MY_LONG_LIVED_ACCESS_TOKEN
+                        }
+                    });
                     console.log(findUser.data);
                     const setMessage = "Thank you for reaching out. We will get back to you soon.";
                     const recipientId = message.sender.id;
                     let user;
                     try {
-                        return user = await (0, sendMessages_1.sendMessages)(setMessage, recipientId);
+                        return (user = await (0, sendMessages_1.sendMessages)(setMessage, recipientId));
                     }
                     catch (sendError) {
                         console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);

@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { sendMessages } from "../controllers/userControllers/sendMessages";
-import {ADMIN_SCOPED_ID, FETCH_USER_PROFILE_URL, VERIFY_TOKEN} from '../keys'
+import { ADMIN_SCOPED_ID, FETCH_USER_PROFILE_URL, MY_LONG_LIVED_ACCESS_TOKEN, VERIFY_TOKEN } from "../keys";
 import axios from "axios";
 import { supabase } from "../app";
 
 // Webhook verification
 export const verifyWebhook = (request: Request, response: Response) => {
-
   const mode = request.query["hub.mode"];
   const token = request.query["hub.verify_token"];
   const challenge = request.query["hub.challenge"];
@@ -33,41 +32,55 @@ export const handleWebhook = async (request: Request, response: Response) => {
           const message = entry.messaging[0];
           let checkUserId = message.sender.id;
 
-          if(checkUserId === ADMIN_SCOPED_ID){
-            return;
-          }
-          
-          const { data: findScopedId, error: findScopedIdError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('instagram_scoped_id', checkUserId)
-          .single();
-          
-          if(findScopedId){
+          if (checkUserId === ADMIN_SCOPED_ID) {
             return;
           }
 
-          const findUser = await axios.get(`${FETCH_USER_PROFILE_URL}/${checkUserId}?fields=name,username,is_user_follow_business,is_business_follow_user`)
-          console.log(findUser.data)
-          const setMessage = "Thank you for reaching out. We will get back to you soon.";
+          const { data: findScopedId, error: findScopedIdError } =
+            await supabase
+              .from("users")
+              .select("*")
+              .eq("instagram_scoped_id", checkUserId)
+              .single();
+
+          if (findScopedId) {
+            return;
+          }
+
+          const findUser = await axios.get(
+            `${FETCH_USER_PROFILE_URL}/${checkUserId}?fields=name,username,is_user_follow_business,is_business_follow_user`, {
+              params: {
+                access_token : MY_LONG_LIVED_ACCESS_TOKEN
+              }
+            }
+          );
+          console.log(findUser.data);
+          const setMessage =
+            "Thank you for reaching out. We will get back to you soon.";
           const recipientId = message.sender.id;
 
           let user;
           try {
-          return user = await sendMessages(setMessage, recipientId);
-          } catch (sendError:any) {
-            console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);
+            return (user = await sendMessages(setMessage, recipientId));
+          } catch (sendError: any) {
+            console.error(
+              `Error sending message to ${recipientId}:`,
+              sendError.response ? sendError.response.data : sendError.message
+            );
           }
-          }
-          });
-          
-          await Promise.all(promises);
-         return response.status(200).json({message: "EVENT_RECEIVED"});
-          } else {
-            response.sendStatus(404);
-            }
+        }
+      });
+
+      await Promise.all(promises);
+      return response.status(200).json({ message: "EVENT_RECEIVED" });
+    } else {
+      response.sendStatus(404);
+    }
   } catch (error: any) {
-    console.error("Webhook handling error:", error.response ? error.response.data : error.message);
+    console.error(
+      "Webhook handling error:",
+      error.response ? error.response.data : error.message
+    );
     response.sendStatus(500);
   }
-}
+};
