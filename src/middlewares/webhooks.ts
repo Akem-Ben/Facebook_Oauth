@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { sendMessages } from "../controllers/userControllers/sendMessages";
-import {ADMIN_SCOPED_ID, VERIFY_TOKEN} from '../keys'
+import {ADMIN_SCOPED_ID, FETCH_USER_PROFILE_URL, VERIFY_TOKEN} from '../keys'
 import axios from "axios";
 import { supabase } from "../app";
 
@@ -26,7 +26,7 @@ export const verifyWebhook = (request: Request, response: Response) => {
 export const handleWebhook = async (request: Request, response: Response) => {
   try {
     const body = request.body;
-console.log(body.entry[0].messaging)
+
     if (body.object === "instagram") {
       const promises = body.entry.map(async (entry: any) => {
         if (entry.messaging && entry.messaging.length > 0) {
@@ -47,6 +47,8 @@ console.log(body.entry[0].messaging)
             return;
           }
 
+          const findUser = await axios.get(`${FETCH_USER_PROFILE_URL}/${checkUserId}?fields=name,username,is_user_follow_business,is_business_follow_user`)
+          console.log(findUser.data)
           const setMessage = "Thank you for reaching out. We will get back to you soon.";
           const recipientId = message.sender.id;
 

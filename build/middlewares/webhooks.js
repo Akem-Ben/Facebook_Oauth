@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleWebhook = exports.verifyWebhook = void 0;
 const sendMessages_1 = require("../controllers/userControllers/sendMessages");
 const keys_1 = require("../keys");
+const axios_1 = __importDefault(require("axios"));
 const app_1 = require("../app");
 // Webhook verification
 const verifyWebhook = (request, response) => {
@@ -26,7 +30,6 @@ exports.verifyWebhook = verifyWebhook;
 const handleWebhook = async (request, response) => {
     try {
         const body = request.body;
-        console.log(body.entry[0].messaging);
         if (body.object === "instagram") {
             const promises = body.entry.map(async (entry) => {
                 if (entry.messaging && entry.messaging.length > 0) {
@@ -43,6 +46,8 @@ const handleWebhook = async (request, response) => {
                     if (findScopedId) {
                         return;
                     }
+                    const findUser = await axios_1.default.get(`${keys_1.FETCH_USER_PROFILE_URL}/${checkUserId}?fields=name,username,is_user_follow_business,is_business_follow_user`);
+                    console.log(findUser.data);
                     const setMessage = "Thank you for reaching out. We will get back to you soon.";
                     const recipientId = message.sender.id;
                     let user;

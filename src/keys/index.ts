@@ -9,6 +9,7 @@ export const PUBLIC_KEY = process.env.PUBLIC_KEY!
 export const ERROR_REDIRECT_URI = process.env.ERROR_REDIRECT_URI!
 export const DATABASE_URL = process.env.DATABASE_URL!
 export const APP_KEY = process.env.APP_KEY!
+export const FETCH_USER_PROFILE_URL = process.env.FETCH_USER_PROFILE_URL!
 
 
 //======================= USER FACEBOOK ======================
