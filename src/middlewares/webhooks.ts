@@ -55,8 +55,22 @@ export const handleWebhook = async (request: Request, response: Response) => {
             }
           );
           console.log(findUser.data);
+
+          const userDetails = findUser.data;
+
+          const { data: findUserName, error: findUserNameError } =
+            await supabase
+              .from("users")
+              .select("*")
+              .eq("instagram_user_name", userDetails.username)
+              .single();
+
+              if(findUserName){
+                return;
+              }
+
           const setMessage =
-            "Thank you for reaching out. We will get back to you soon.";
+            `Thank you for reaching out. We will get back to you soon. Please visit our site on www.me.ng to register and be included in our database. ${!userDetails.is_user_follow_business ? "Please follow our account to get new updates." : ""}`;
           const recipientId = message.sender.id;
 
           let user;
