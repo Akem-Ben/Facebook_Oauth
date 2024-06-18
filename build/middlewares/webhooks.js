@@ -35,6 +35,9 @@ const handleWebhook = async (request, response) => {
             const promises = body.entry.map(async (entry) => {
                 if (entry.messaging && entry.messaging.length > 0) {
                     const message = entry.messaging[0];
+                    const messageText = message.message.text;
+                    // Emit the incoming message text
+                    (0, app_2.emitMessage)(messageText);
                     let checkUserId = message.sender.id;
                     if (checkUserId === keys_1.ADMIN_SCOPED_ID) {
                         return;
