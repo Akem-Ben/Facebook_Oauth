@@ -10,7 +10,6 @@ const helperFunctions_1 = require("../../utilities/helperFunctions");
 const getConversations = async (request, response) => {
     try {
         const conversations = await axios_1.default.get(keys_1.FETCH_CONVERSATIONS_URL);
-        console.log('con', conversations);
         if (!conversations.data.messages.data ||
             conversations.data.messages.data.length === 0 ||
             conversations.data.messages.data === undefined) {
