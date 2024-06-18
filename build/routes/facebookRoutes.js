@@ -9,7 +9,7 @@ const logout_1 = require("../controllers/userControllers/logout");
 const instagram_auth_1 = require("../controllers/instagramAuth/instagram-auth");
 const webhooks_1 = require("../middlewares/webhooks");
 const fetchUserConversations_1 = require("../controllers/userControllers/fetchUserConversations");
-// import { sendMessages } from "../controllers/userControllers/sendMessages";
+const messageSendingEndpoint_1 = require("../controllers/userControllers/messageSendingEndpoint");
 const router = express_1.default.Router();
 router.get('/auth/facebook', facebook_auth_1.facebookAuth);
 router.get('/auth/facebook/callback', facebook_auth_1.facebookCallback);
@@ -19,5 +19,5 @@ router.post('/logout/:accessToken', logout_1.logout);
 router.get('/webhook', webhooks_1.verifyWebhook);
 router.post('/webhook', webhooks_1.handleWebhook);
 router.get('/converse', fetchUserConversations_1.getConversations);
-// router.post('/send-message', sendMessages)
+router.post('/send-message', messageSendingEndpoint_1.sendMessagesEndpoint);
 exports.default = router;

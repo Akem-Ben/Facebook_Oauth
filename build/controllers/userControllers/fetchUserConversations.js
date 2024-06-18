@@ -34,7 +34,7 @@ const getConversations = async (request, response) => {
     }
     catch (error) {
         console.log('fetch user conversation error', error.response ? error.response.data : error.message);
-        return response.status(500).json({ error: error.response.data });
+        return response.status(500).json({ message: 'error, contact admin' });
     }
 };
 exports.getConversations = getConversations;

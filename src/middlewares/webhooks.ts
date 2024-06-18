@@ -3,6 +3,7 @@ import { sendMessages } from "../controllers/userControllers/sendMessages";
 import { ADMIN_SCOPED_ID, FETCH_USER_PROFILE_URL, MY_LONG_LIVED_ACCESS_TOKEN, VERIFY_TOKEN } from "../keys";
 import axios from "axios";
 import { supabase } from "../app";
+import { emitMessage } from "../app";
 
 // Webhook verification
 export const verifyWebhook = (request: Request, response: Response) => {
@@ -25,7 +26,6 @@ export const verifyWebhook = (request: Request, response: Response) => {
 export const handleWebhook = async (request: Request, response: Response) => {
   try {
     const body = request.body;
-
     if (body.object === "instagram") {
       const promises = body.entry.map(async (entry: any) => {
         if (entry.messaging && entry.messaging.length > 0) {
@@ -81,7 +81,8 @@ export const handleWebhook = async (request: Request, response: Response) => {
 
           let user;
           try {
-            return (user = await sendMessages(setMessage, recipientId));
+            user = await sendMessages(setMessage, recipientId);
+            return emitMessage(setMessage);
           } catch (sendError: any) {
             console.error(
               `Error sending message to ${recipientId}:`,

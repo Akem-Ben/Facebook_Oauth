@@ -4,7 +4,7 @@ import { logout } from "../controllers/userControllers/logout";
 import { instagramAuth, instagramCallback } from "../controllers/instagramAuth/instagram-auth";
 import { handleWebhook, verifyWebhook } from "../middlewares/webhooks";
 import { getConversations } from "../controllers/userControllers/fetchUserConversations";
-// import { sendMessages } from "../controllers/userControllers/sendMessages";
+import { sendMessagesEndpoint } from "../controllers/userControllers/messageSendingEndpoint";
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.post('/logout/:accessToken', logout);
 router.get('/webhook', verifyWebhook)
 router.post('/webhook', handleWebhook)
 router.get('/converse', getConversations)
-// router.post('/send-message', sendMessages)
+router.post('/send-message', sendMessagesEndpoint)
 
 export default router;
 

@@ -8,15 +8,20 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import faceBookRouter from "./routes/facebookRoutes";
 import { scheduler } from "./utilities/scheduler";
-import {APP_KEY} from './keys';
-import {DATABASE_URL} from './keys';
-import {PUBLIC_KEY} from './keys';
-import {PORT} from './keys';
+import { APP_KEY, DATABASE_URL, PUBLIC_KEY, PORT } from './keys';
+import http from 'http';
+import { Server } from 'socket.io';
 
 const app = express();
+const server = http.createServer(app);
+export const io = new Server(server, {
+  cors: {
+    // origin: "http://localhost:3000", 
+    // methods: ["GET", "POST"]
+  }
+});
 
 dotenv.config();
-
 
 app.use(bodyParser.json());
 app.use(logger("dev"));
@@ -41,10 +46,7 @@ app.use("/", faceBookRouter);
 
 scheduler();
 
-export const supabase = createClient(
-  `${DATABASE_URL}`,
-  `${PUBLIC_KEY}`
-);
+export const supabase = createClient(DATABASE_URL, PUBLIC_KEY);
 
 const checkConnection = async () => {
   const { error } = await supabase.from("users").select("id").limit(1);
@@ -63,6 +65,18 @@ app.get("/", (request: Request, response: Response) => {
   response.send("Server Hosted Successfully");
 });
 
-app.listen(PORT, () => {
+// Handle new connections to the websocket
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
+export const emitMessage = (message: any) => {
+  io.emit("newMessage", message);
+};
+
+server.listen(PORT, () => {
   console.log(`server running on Port ${PORT}`);
 });

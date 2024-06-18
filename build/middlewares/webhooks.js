@@ -8,6 +8,7 @@ const sendMessages_1 = require("../controllers/userControllers/sendMessages");
 const keys_1 = require("../keys");
 const axios_1 = __importDefault(require("axios"));
 const app_1 = require("../app");
+const app_2 = require("../app");
 // Webhook verification
 const verifyWebhook = (request, response) => {
     const mode = request.query["hub.mode"];
@@ -70,7 +71,8 @@ const handleWebhook = async (request, response) => {
                     const recipientId = message.sender.id;
                     let user;
                     try {
-                        return (user = await (0, sendMessages_1.sendMessages)(setMessage, recipientId));
+                        user = await (0, sendMessages_1.sendMessages)(setMessage, recipientId);
+                        return (0, app_2.emitMessage)(setMessage);
                     }
                     catch (sendError) {
                         console.error(`Error sending message to ${recipientId}:`, sendError.response ? sendError.response.data : sendError.message);

@@ -12,9 +12,6 @@ import {
   USER_FACEBOOK_APP_SECRET,
 } from "../../keys/index";
 
-import { registerUserFacebook } from "../userControllers/registerUserFacebook";
-import { isClient } from "../../utilities/helperFunctions";
-
 declare module "express-session" {
   interface SessionData {
     accessToken: string;
