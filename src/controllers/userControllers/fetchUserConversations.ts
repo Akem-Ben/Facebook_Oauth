@@ -13,7 +13,7 @@ export const getConversations = async (
 ) => {
   try {
     const conversations = await axios.get(FETCH_CONVERSATIONS_URL);
-
+console.log('con', conversations)
     if (
       !conversations.data.messages.data ||
       conversations.data.messages.data.length === 0 ||
