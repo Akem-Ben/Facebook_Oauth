@@ -51,7 +51,6 @@ const handleWebhook = async (request, response) => {
                             access_token: keys_1.MY_LONG_LIVED_ACCESS_TOKEN
                         }
                     });
-                    console.log(findUser.data);
                     const userDetails = findUser.data;
                     const { data: findUserName, error: findUserNameError } = await app_1.supabase
                         .from("users")
@@ -59,6 +58,14 @@ const handleWebhook = async (request, response) => {
                         .eq("instagram_user_name", userDetails.username)
                         .single();
                     if (findUserName) {
+                        const { data: updateUser, error: updateUserError } = await app_1.supabase
+                            .from('users')
+                            .update({ instagram_scoped_id: checkUserId })
+                            .eq('instagram_user_name', userDetails.username);
+                        if (updateUserError) {
+                            console.error('Error updating user:', updateUserError.message);
+                            return 'error';
+                        }
                         return;
                     }
                     const setMessage = `Thank you for reaching out. We will get back to you soon. Please visit our site on www.me.ng to register and be included in our database. ${!userDetails.is_user_follow_business ? "Please follow our account to get new updates." : ""}`;

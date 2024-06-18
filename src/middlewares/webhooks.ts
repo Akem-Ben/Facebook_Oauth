@@ -54,7 +54,6 @@ export const handleWebhook = async (request: Request, response: Response) => {
               }
             }
           );
-          console.log(findUser.data);
 
           const userDetails = findUser.data;
 
@@ -65,7 +64,16 @@ export const handleWebhook = async (request: Request, response: Response) => {
               .eq("instagram_user_name", userDetails.username)
               .single();
 
-              if(findUserName){
+              if (findUserName) {
+                const { data: updateUser, error: updateUserError } = await supabase
+                  .from('users')
+                  .update({ instagram_scoped_id: checkUserId })
+                  .eq('instagram_user_name', userDetails.username);
+    
+                if (updateUserError) {
+                  console.error('Error updating user:', updateUserError.message);
+                  return 'error';
+                }
                 return;
               }
 
