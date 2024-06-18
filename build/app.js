@@ -17,12 +17,13 @@ const scheduler_1 = require("./utilities/scheduler");
 const keys_1 = require("./keys");
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
+const sendMessages_1 = require("./controllers/userControllers/sendMessages");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 exports.io = new socket_io_1.Server(server, {
     cors: {
-    // origin: "http://localhost:3000", 
-    // methods: ["GET", "POST"]
+        origin: "https://facebook-oauth-ihe6.onrender.com",
+        methods: ["GET", "POST"]
     }
 });
 dotenv_1.default.config();
@@ -37,7 +38,7 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        secure: true, // Set to true if using HTTPS
+        secure: false, // Set to true if using HTTPS
         maxAge: 60000 // Adjust as needed
     }
 }));
@@ -61,6 +62,25 @@ app.get("/", (request, response) => {
 // Handle new connections to the websocket
 exports.io.on("connection", (socket) => {
     console.log("a user connected");
+    socket.on("disconnect", () => {
+        console.log("user disconnected");
+    });
+});
+exports.io.on("connection", async (socket) => {
+    console.log("a user connected");
+    socket.on("sendMessage", (data) => {
+        console.log("Received message:", data);
+        // Process the message and send it to the intended recipient
+        const recipientId = data.userId;
+        const messageText = data.message;
+        (0, sendMessages_1.sendMessages)(messageText, recipientId).then((response) => {
+            console.log(`Message sent to ${recipientId}:`, response);
+            exports.io.emit("newMessage", data.message);
+        })
+            .catch((error) => {
+            console.error(`Error sending message to ${recipientId}:`, error);
+        });
+    });
     socket.on("disconnect", () => {
         console.log("user disconnected");
     });
