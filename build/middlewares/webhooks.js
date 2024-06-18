@@ -26,6 +26,7 @@ exports.verifyWebhook = verifyWebhook;
 const handleWebhook = async (request, response) => {
     try {
         const body = request.body;
+        console.log(body);
         if (body.object === "instagram") {
             const promises = body.entry.map(async (entry) => {
                 if (entry.messaging && entry.messaging.length > 0) {
@@ -34,12 +35,12 @@ const handleWebhook = async (request, response) => {
                     if (checkUserId === keys_1.ADMIN_SCOPED_ID) {
                         return;
                     }
-                    const { data: findUser, error: findUserError } = await app_1.supabase
+                    const { data: findScopedId, error: findScopedIdError } = await app_1.supabase
                         .from('users')
                         .select('*')
                         .eq('instagram_scoped_id', checkUserId)
                         .single();
-                    if (findUser) {
+                    if (findScopedId) {
                         return;
                     }
                     const setMessage = "Thank you for reaching out. We will get back to you soon.";

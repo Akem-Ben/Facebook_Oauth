@@ -87,10 +87,6 @@ export const instagramCallback = async (
     );
 
     const instagramProfile = profileResponse.data;
-
-    const facebookUser = process.env.FACEBOOK_ID;
-    
-    console.log('facebook user', facebookUser)
    
   const profile = {
     instagram_id: instagramProfile.id,

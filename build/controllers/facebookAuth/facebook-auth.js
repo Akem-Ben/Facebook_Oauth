@@ -7,7 +7,6 @@ exports.facebookCallback = exports.facebookAuth = void 0;
 const axios_1 = __importDefault(require("axios"));
 require("express-session");
 const index_1 = require("../../keys/index");
-const registerUserFacebook_1 = require("../userControllers/registerUserFacebook");
 const facebookAuth = (request, response) => {
     const authUrl = `${index_1.FACEBOOK_AUTH_URL}?client_id=${index_1.USER_FACEBOOK_APP_ID}&redirect_uri=${index_1.FACEBOOK_AUTH_REDIRECT_URI}&scope=email,public_profile,instagram_basic`;
     response.redirect(authUrl);
@@ -43,16 +42,15 @@ const facebookCallback = async (request, response) => {
                 fields: "id,last_name,email,first_name,gender,middle_name",
             },
         });
-        const profile = profileResponse.data;
-        const newUser = {
-            facebook_id: profile.id,
-            email: profile.email,
-            first_name: profile.first_name,
-            last_name: profile.last_name,
-            facebook_access_token: longLivedAccessToken,
-        };
-        process.env.FACEBOOK_ID = profile.id;
-        const user = await (0, registerUserFacebook_1.registerUserFacebook)(newUser);
+        // const profile = profileResponse.data;
+        // const newUser = {
+        //   facebook_id: profile.id,
+        //   email: profile.email, 
+        //   first_name: profile.first_name, 
+        //   last_name: profile.last_name,
+        //   facebook_access_token: longLivedAccessToken,
+        // }
+        // const user = await registerUserFacebook(newUser);
         response.redirect(index_1.FACEBOOK_CALLBACK_REDIRECT);
     }
     catch (error) {

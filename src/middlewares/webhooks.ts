@@ -26,7 +26,7 @@ export const verifyWebhook = (request: Request, response: Response) => {
 export const handleWebhook = async (request: Request, response: Response) => {
   try {
     const body = request.body;
-
+console.log(body)
     if (body.object === "instagram") {
       const promises = body.entry.map(async (entry: any) => {
         if (entry.messaging && entry.messaging.length > 0) {
@@ -37,13 +37,13 @@ export const handleWebhook = async (request: Request, response: Response) => {
             return;
           }
           
-          const { data: findUser, error: findUserError } = await supabase
+          const { data: findScopedId, error: findScopedIdError } = await supabase
           .from('users')
           .select('*')
           .eq('instagram_scoped_id', checkUserId)
           .single();
           
-          if(findUser){
+          if(findScopedId){
             return;
           }
 
