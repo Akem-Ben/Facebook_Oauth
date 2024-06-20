@@ -1,6 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isClient = exports.formatDate = exports.formatTimeFromISO = void 0;
+exports.fetchAdminConversationsIds = exports.isClient = exports.formatDate = exports.formatTimeFromISO = void 0;
+const axios_1 = __importDefault(require("axios"));
+const keys_1 = require("../keys");
 function formatTimeFromISO(isoString) {
     // Parse the ISO string to a Date object
     const date = new Date(isoString);
@@ -30,3 +35,14 @@ const isClient = () => {
     return typeof window !== 'undefined' && 'localStorage' in window;
 };
 exports.isClient = isClient;
+const fetchAdminConversationsIds = async () => {
+    try {
+        const getData = await axios_1.default.get(`${keys_1.FETCH_ADMIN_CONVERSATIONS_DETAILS_URI}/${keys_1.ADMIN_FACEBOOK_PAGE_ID}/conversations?platform=instagram&access_token=${keys_1.MY_LONG_LIVED_ACCESS_TOKEN}`);
+        const conversations = getData.data.data;
+        return conversations;
+    }
+    catch (error) {
+        console.log(error.message);
+    }
+};
+exports.fetchAdminConversationsIds = fetchAdminConversationsIds;

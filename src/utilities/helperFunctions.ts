@@ -1,3 +1,6 @@
+import axios from "axios";
+import { ADMIN_FACEBOOK_PAGE_ID, FETCH_ADMIN_CONVERSATIONS_DETAILS_URI, MY_LONG_LIVED_ACCESS_TOKEN } from "../keys";
+
 export function formatTimeFromISO(isoString: Date): string {
     // Parse the ISO string to a Date object
     const date = new Date(isoString);
@@ -27,3 +30,13 @@ export function formatTimeFromISO(isoString: Date): string {
 export const isClient = () => {
   return typeof window !== 'undefined' && 'localStorage' in window;
 };
+
+export const fetchAdminConversationsIds = async() => {
+  try{
+    const getData = await axios.get(`${FETCH_ADMIN_CONVERSATIONS_DETAILS_URI}/${ADMIN_FACEBOOK_PAGE_ID}/conversations?platform=instagram&access_token=${MY_LONG_LIVED_ACCESS_TOKEN}`)
+    const conversations = getData.data.data
+    return conversations
+  }catch(error:any){
+    console.log(error.message)
+  }
+}
